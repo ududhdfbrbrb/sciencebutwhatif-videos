@@ -1,0 +1,6 @@
+it|ITALY|Which country is home to the Colosseum?
+mx|MEXICO|Which country is home to Chichen Itza?
+la|LAOS|Which country's capital is Vientiane?
+au|AUSTRALIA|Which country is home to the kangaroo?
+tr|TURKEY|Which country is home to the city of Istanbul?
+na|NAMIBIA|Which country is home to the Skeleton Coast?
