@@ -10,3 +10,6 @@ cz|CZECHIA|#1: 148.8 liters per person
 jp|JAPAN|Famous for sushi
 hu|HUNGARY|Famous for goulash
 ge|GEORGIA|Famous for khachapuri
+fi|FINLAND|#3: 178,947 islands
+no|NORWAY|#2: 239,057 islands
+se|SWEDEN|#1: 267,570 islands
