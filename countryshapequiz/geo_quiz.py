@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H, FPS = 1080, 1920, 30
 """Usage: python3 geo_quiz.py config.json out.mp4 [--still t1 t2 ...]
-config.json: {"countries": [{"iso": "fr", "name": "FRANCE", "q": "Which country ...?"}, ...],
+config.json: {"countries": [{"iso": "fr", "name": "FRANCE", "q": "Which country ...?", "fact": "optional extra line after reveal"}, ...],
               "title": "GUESS THE COUNTRY", "subtitle": "by its shape only"}
 Assets (run setup.sh first): $GEO_ASSETS (default /home/claude/geoassets)"""
 import os
@@ -114,9 +114,11 @@ def render_globe(lat0, lon0, R, cx=W / 2, cy=H / 2):
 
 # ---------- text ----------
 _fonts = {}
-def font(s):
-    if s not in _fonts: _fonts[s] = ImageFont.truetype(FONT, s)
-    return _fonts[s]
+FONT_FACT = next((p for p in ['/usr/share/fonts/opentype/inter/Inter-SemiBold.otf', '/usr/share/fonts/truetype/google-fonts/Inter-SemiBold.ttf'] if os.path.exists(p)), FONT)
+def font(s, path=None):
+    path = path or FONT
+    if (path, s) not in _fonts: _fonts[(path, s)] = ImageFont.truetype(path, s)
+    return _fonts[(path, s)]
 
 def wrap(text, f, maxw):
     words, lines, cur = text.split(), [], ''
@@ -126,9 +128,9 @@ def wrap(text, f, maxw):
         else: lines.append(cur); cur = w_
     lines.append(cur); return lines
 
-def draw_text(pil, text, cy, size, scale=1.0, alpha=1.0, fill=(255, 255, 255), stroke=10, maxw=940, top=None):
+def draw_text(pil, text, cy, size, scale=1.0, alpha=1.0, fill=(255, 255, 255), stroke=10, maxw=940, top=None, fpath=None, shadow=False):
     if alpha <= 0.01: return
-    f = font(max(8, int(size * scale)))
+    f = font(max(8, int(size * scale)), fpath)
     lines = wrap(text, f, maxw)
     lh = int(f.size * 1.18)
     layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
@@ -138,6 +140,11 @@ def draw_text(pil, text, cy, size, scale=1.0, alpha=1.0, fill=(255, 255, 255), s
         tw = f.getlength(ln)
         d.text(((W - tw) / 2, top + i * lh), ln, font=f, fill=fill + (255,),
                stroke_width=int(stroke * scale), stroke_fill=(0, 0, 0, 255))
+    if shadow:  # soft drop shadow under the text
+        sh = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+        sh.putalpha(layer.split()[3].filter(ImageFilter.GaussianBlur(6)))
+        base = Image.new('RGBA', (W, H), (0, 0, 0, 0)); base.alpha_composite(sh, (4, 6)); base.alpha_composite(sh, (4, 6))
+        base.alpha_composite(layer); layer = base
     if alpha < 1:
         a = layer.split()[3].point(lambda v: int(v * alpha)); layer.putalpha(a)
     pil.alpha_composite(layer)
@@ -278,6 +285,9 @@ def frame_at(t):
             ns = 150
             while ns > 70 and font(ns).getlength(k['name']) > 960: ns -= 6
             draw_text(pil, k['name'], 1590, ns, pop(lt - 4.5), na, stroke=16, maxw=2000)
+        if k.get('fact') and lt >= 4.8:  # optional extra fun fact under the revealed name
+            fa = ease((lt - 4.8) / 0.3) * (1 - ease((lt - 6.25) / 0.3))
+            draw_text(pil, k['fact'], 1735, 48, 1, fa, stroke=4, maxw=920, fpath=FONT_FACT, shadow=True)
     draw_watermark(pil)
     return cv2.cvtColor(np.array(pil.convert('RGB')), cv2.COLOR_RGB2BGR)
 
