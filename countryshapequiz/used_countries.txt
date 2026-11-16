@@ -16,3 +16,6 @@ se|SWEDEN|#1: 267,570 islands
 dk|DENMARK|#3: 7.539 out of 10
 is|ICELAND|#2: 7.540 out of 10
 fi|FINLAND|#1: 7.764 out of 10
+us|UNITED STATES|#3: about 347 million people
+cn|CHINA|#2: about 1.42 billion people
+in|INDIA|#1: about 1.46 billion people
