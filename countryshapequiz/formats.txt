@@ -1,3 +1,4 @@
 2026-11-16 ranking beer per person (Kirin 2024 data)
 2026-11-16 food sushi/goulash/khachapuri
 2026-11-16 ranking most islands (WorldAtlas/Wikipedia counts)
+2026-11-16 ranking happiest countries (World Happiness Report 2026)

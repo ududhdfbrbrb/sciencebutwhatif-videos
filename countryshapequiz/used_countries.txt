@@ -13,3 +13,6 @@ ge|GEORGIA|Famous for khachapuri
 fi|FINLAND|#3: 178,947 islands
 no|NORWAY|#2: 239,057 islands
 se|SWEDEN|#1: 267,570 islands
+dk|DENMARK|#3: 7.539 out of 10
+is|ICELAND|#2: 7.540 out of 10
+fi|FINLAND|#1: 7.764 out of 10
