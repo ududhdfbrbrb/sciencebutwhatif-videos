@@ -4,3 +4,9 @@ la|LAOS|Which country's capital is Vientiane?
 au|AUSTRALIA|Which country is home to the kangaroo?
 tr|TURKEY|Which country is home to the city of Istanbul?
 na|NAMIBIA|Which country is home to the Skeleton Coast?
+at|AUSTRIA|#3: 104.6 liters per person
+lt|LITHUANIA|#2: 110.6 liters per person
+cz|CZECHIA|#1: 148.8 liters per person
+jp|JAPAN|Famous for sushi
+hu|HUNGARY|Famous for goulash
+ge|GEORGIA|Famous for khachapuri
