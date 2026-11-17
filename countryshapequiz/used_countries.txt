@@ -31,3 +31,6 @@ ru|RUSSIA|#1: 17.1 million sq km
 pe|PERU|Home of Machu Picchu
 kh|CAMBODIA|Home of Angkor Wat
 jo|JORDAN|Home of the ancient city of Petra
+ee|ESTONIA|#3: 182.8 cm average
+me|MONTENEGRO|#2: 183.3 cm average
+nl|NETHERLANDS|#1: 183.8 cm average
