@@ -1,0 +1,36 @@
+it|ITALY|Which country is home to the Colosseum?
+mx|MEXICO|Which country is home to Chichen Itza?
+la|LAOS|Which country's capital is Vientiane?
+au|AUSTRALIA|Which country is home to the kangaroo?
+tr|TURKEY|Which country is home to the city of Istanbul?
+na|NAMIBIA|Which country is home to the Skeleton Coast?
+at|AUSTRIA|#3: 104.6 liters per person
+lt|LITHUANIA|#2: 110.6 liters per person
+cz|CZECHIA|#1: 148.8 liters per person
+jp|JAPAN|Famous for sushi
+hu|HUNGARY|Famous for goulash
+ge|GEORGIA|Famous for khachapuri
+fi|FINLAND|#3: 178,947 islands
+no|NORWAY|#2: 239,057 islands
+se|SWEDEN|#1: 267,570 islands
+dk|DENMARK|#3: 7.539 out of 10
+is|ICELAND|#2: 7.540 out of 10
+fi|FINLAND|#1: 7.764 out of 10
+us|UNITED STATES|#3: about 347 million people
+cn|CHINA|#2: about 1.42 billion people
+in|INDIA|#1: about 1.46 billion people
+is|ICELAND|#3: 9 kg per person
+no|NORWAY|#2: 9.9 kg per person
+fi|FINLAND|#1: 12 kg per person
+ca|CANADA|Capital: Ottawa
+ke|KENYA|Capital: Nairobi
+uz|UZBEKISTAN|Capital: Tashkent
+us|UNITED STATES|#3: 9.83 million sq km
+ca|CANADA|#2: 9.98 million sq km
+ru|RUSSIA|#1: 17.1 million sq km
+pe|PERU|Home of Machu Picchu
+kh|CAMBODIA|Home of Angkor Wat
+jo|JORDAN|Home of the ancient city of Petra
+ee|ESTONIA|#3: 182.8 cm average
+me|MONTENEGRO|#2: 183.3 cm average
+nl|NETHERLANDS|#1: 183.8 cm average
