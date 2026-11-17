@@ -34,3 +34,9 @@ jo|JORDAN|Home of the ancient city of Petra
 ee|ESTONIA|#3: 182.8 cm average
 me|MONTENEGRO|#2: 183.3 cm average
 nl|NETHERLANDS|#1: 183.8 cm average
+fi|FINLAND|#3: 188,000 lakes
+ru|RUSSIA|#2: 201,200 lakes
+ca|CANADA|#1: 879,800 lakes
+za|SOUTH AFRICA|National animal: springbok
+bt|BHUTAN|National animal: takin
+nz|NEW ZEALAND|National animal: kiwi

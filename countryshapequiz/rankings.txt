@@ -5,3 +5,4 @@ most people (total population)
 coffee consumption per person
 biggest countries by total area
 tallest people (average male height)
+most lakes (number of lakes)
