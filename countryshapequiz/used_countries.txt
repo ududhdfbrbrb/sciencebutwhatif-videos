@@ -19,3 +19,9 @@ fi|FINLAND|#1: 7.764 out of 10
 us|UNITED STATES|#3: about 347 million people
 cn|CHINA|#2: about 1.42 billion people
 in|INDIA|#1: about 1.46 billion people
+is|ICELAND|#3: 9 kg per person
+no|NORWAY|#2: 9.9 kg per person
+fi|FINLAND|#1: 12 kg per person
+ca|CANADA|Capital: Ottawa
+ke|KENYA|Capital: Nairobi
+uz|UZBEKISTAN|Capital: Tashkent
