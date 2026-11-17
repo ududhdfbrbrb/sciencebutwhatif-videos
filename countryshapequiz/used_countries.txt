@@ -25,3 +25,9 @@ fi|FINLAND|#1: 12 kg per person
 ca|CANADA|Capital: Ottawa
 ke|KENYA|Capital: Nairobi
 uz|UZBEKISTAN|Capital: Tashkent
+us|UNITED STATES|#3: 9.83 million sq km
+ca|CANADA|#2: 9.98 million sq km
+ru|RUSSIA|#1: 17.1 million sq km
+pe|PERU|Home of Machu Picchu
+kh|CAMBODIA|Home of Angkor Wat
+jo|JORDAN|Home of the ancient city of Petra

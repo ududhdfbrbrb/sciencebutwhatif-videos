@@ -5,3 +5,5 @@
 2026-11-16 ranking most people (UN World Population Prospects 2024, 2025 estimates)
 2026-11-17 ranking coffee per person (World Population Review via StoneX)
 2026-11-17 capital ca/ke/uz
+2026-11-17 ranking biggest countries by total area (CIA World Factbook)
+2026-11-17 landmark pe/kh/jo
