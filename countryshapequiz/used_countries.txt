@@ -40,3 +40,6 @@ ca|CANADA|#1: 879,800 lakes
 za|SOUTH AFRICA|National animal: springbok
 bt|BHUTAN|National animal: takin
 nz|NEW ZEALAND|National animal: kiwi
+fr|FRANCE|#3: 56 World Heritage Sites
+cn|CHINA|#2: 61 World Heritage Sites
+it|ITALY|#1: 62 World Heritage Sites
