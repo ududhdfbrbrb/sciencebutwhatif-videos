@@ -49,3 +49,6 @@ us|USA|#1: 989 billionaires
 ar|ARGENTINA|Capital: Buenos Aires
 vn|VIETNAM|Capital: Hanoi
 mn|MONGOLIA|Capital: Ulaanbaatar
+us|USA|#3: 72.4 million tourists
+es|SPAIN|#2: 94 million tourists
+fr|FRANCE|#1: 100 million tourists

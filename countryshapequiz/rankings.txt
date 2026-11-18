@@ -8,3 +8,4 @@ tallest people (average male height)
 most lakes (number of lakes)
 most UNESCO World Heritage Sites
 most billionaires (Forbes 2026)
+most visited countries (international tourists 2024)
