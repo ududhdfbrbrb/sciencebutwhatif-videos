@@ -52,3 +52,6 @@ mn|MONGOLIA|Capital: Ulaanbaatar
 us|USA|#3: 72.4 million tourists
 es|SPAIN|#2: 94 million tourists
 fr|FRANCE|#1: 100 million tourists
+br|BRAZIL|Visiting its deadly snake island is banned
+mg|MADAGASCAR|About 90% of its wildlife lives nowhere else
+nr|NAURU|This country has no official capital city
