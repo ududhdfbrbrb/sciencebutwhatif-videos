@@ -43,3 +43,9 @@ nz|NEW ZEALAND|National animal: kiwi
 fr|FRANCE|#3: 56 World Heritage Sites
 cn|CHINA|#2: 61 World Heritage Sites
 it|ITALY|#1: 62 World Heritage Sites
+in|INDIA|#3: 229 billionaires
+cn|CHINA|#2: 539 billionaires
+us|USA|#1: 989 billionaires
+ar|ARGENTINA|Capital: Buenos Aires
+vn|VIETNAM|Capital: Hanoi
+mn|MONGOLIA|Capital: Ulaanbaatar
