@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
     paths: ['.github/workflows/probe-oauth.yml']
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
@@ -11,10 +12,12 @@ jobs:
     steps:
       - run: |
           mkdir out; cd out
-          for u in https://ihateposting.com/.well-known/oauth-protected-resource https://ihateposting.com/.well-known/oauth-protected-resource/mcp https://ihateposting.com/.well-known/oauth-protected-resource/mcp/oauth https://ihateposting.com/.well-known/oauth-authorization-server https://ihateposting.com/.well-known/openid-configuration; do
-            echo "=== GET $u" >> probe.txt; curl -sS -i -m 20 "$u" | head -c 4000 >> probe.txt; echo >> probe.txt; done
-          for u in https://ihateposting.com/mcp https://ihateposting.com/mcp/oauth; do
-            echo "=== POST $u (no auth)" >> probe.txt
-            curl -sS -i -m 20 -X POST "$u" -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"probe","version":"1"}}}' | head -c 3000 >> probe.txt; echo >> probe.txt; done
+          for u in https://ihateposting.com/.well-known/oauth-authorization-server/oauth https://ihateposting.com/oauth/.well-known/oauth-authorization-server https://ihateposting.com/.well-known/openid-configuration/oauth; do
+            echo "=== GET $u" >> probe.txt; curl -sS -m 20 -w "\nHTTP %{http_code}\n" "$u" | head -c 3000 >> probe.txt; echo >> probe.txt; done
+          REG=$(curl -sS -m 20 https://ihateposting.com/.well-known/oauth-authorization-server/oauth | python3 -c "import sys,json;print(json.load(sys.stdin).get('registration_endpoint',''))" 2>/dev/null || true)
+          [ -z "$REG" ] && REG=https://ihateposting.com/oauth/register
+          for ru in "com.sbwi.autoupload:/oauth" "com.sbwi.autoupload://oauth" "http://127.0.0.1:53682/callback"; do
+            echo "=== REGISTER $REG redirect=$ru" >> probe.txt
+            curl -sS -m 20 -w "\nHTTP %{http_code}\n" -X POST "$REG" -H 'Content-Type: application/json' -d "{\"client_name\":\"Upload Control probe\",\"redirect_uris\":[\"$ru\"],\"grant_types\":[\"authorization_code\",\"refresh_token\"],\"response_types\":[\"code\"],\"token_endpoint_auth_method\":\"none\"}" | head -c 2000 >> probe.txt; echo >> probe.txt; done
           git init -q -b probe; git config user.name a; git config user.email a@b.c; git add -A; git commit -qm probe
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" probe
