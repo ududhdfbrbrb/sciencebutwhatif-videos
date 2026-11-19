@@ -1,0 +1,45 @@
+name: Build Upload Control APK
+on:
+  push:
+    branches: [main]
+    paths: ['autoupload-app/**', '.github/workflows/upload-control-apk.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            autoupload-app
+            .github
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '8.7' }
+      - name: Build
+        id: build
+        working-directory: autoupload-app
+        run: |
+          set -o pipefail
+          gradle assembleRelease --no-daemon --stacktrace 2>&1 | tee build.log
+        continue-on-error: true
+      - name: Publish result to apk branch
+        run: |
+          mkdir out
+          cp autoupload-app/build.log out/build.log || true
+          if [ -f autoupload-app/app/build/outputs/apk/release/app-release.apk ]; then
+            cp autoupload-app/app/build/outputs/apk/release/app-release.apk out/UploadControl.apk
+            echo "ok ${GITHUB_SHA}" > out/STATUS
+          else
+            echo "fail ${GITHUB_SHA}" > out/STATUS
+          fi
+          cd out
+          git init -q -b apk
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -qm "Upload Control build ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" apk
