@@ -64,3 +64,6 @@ mm|MYANMAR|Home of the golden Shwedagon Pagoda
 jp|JAPAN|#3: 3,025 restaurants
 cn|CHINA|#2: 7,740 restaurants
 us|UNITED STATES|#1: 13,697 restaurants
+id|INDONESIA|#3: 116 volcanoes
+jp|JAPAN|#2: 121 volcanoes
+us|UNITED STATES|#1: 165 volcanoes
