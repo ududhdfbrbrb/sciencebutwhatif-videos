@@ -26,9 +26,29 @@ jobs:
           set -o pipefail
           gradle assembleRelease --no-daemon --stacktrace 2>&1 | tee build.log
         continue-on-error: true
+      - name: Enable KVM
+        if: steps.build.outcome == 'success'
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Launch test on Android 14 emulator
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: 20
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash autoupload-app/smoketest.sh
       - name: Publish result to apk branch
         run: |
           mkdir out
+          cp autoupload-app/smoke.txt out/smoke.txt || true
+          cp autoupload-app/smoke.png out/smoke.png || true
           cp autoupload-app/build.log out/build.log || true
           if [ -f autoupload-app/app/build/outputs/apk/release/app-release.apk ]; then
             cp autoupload-app/app/build/outputs/apk/release/app-release.apk out/UploadControl.apk

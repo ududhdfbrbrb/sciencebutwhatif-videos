@@ -28,7 +28,7 @@ public class WatchJob extends JobService {
                 .setPeriodic(60 * 60 * 1000L)
                 .setPersisted(true)
                 .build();
-        js.schedule(ji);
+        try { js.schedule(ji); } catch (Exception ignored) {}
     }
 
     @Override public boolean onStartJob(JobParameters params) {

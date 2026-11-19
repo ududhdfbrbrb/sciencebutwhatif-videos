@@ -95,6 +95,13 @@ public class MainActivity extends Activity {
     @Override protected void onCreate(Bundle b) {
         super.onCreate(b);
         prefs = new Prefs(this);
+        Thread.UncaughtExceptionHandler prev = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((th, ex) -> {
+            java.io.StringWriter sw = new java.io.StringWriter();
+            ex.printStackTrace(new java.io.PrintWriter(sw));
+            getSharedPreferences("cfg", MODE_PRIVATE).edit().putString("crash", sw.toString()).commit();
+            if (prev != null) prev.uncaughtException(th, ex);
+        });
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setBackgroundColor(BG);
@@ -125,7 +132,7 @@ public class MainActivity extends Activity {
         if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
         }
-        WatchJob.schedule(this);
+        try { WatchJob.schedule(this); } catch (Exception ignored) {}
 
         Intent in = getIntent();
         if (in != null && Intent.ACTION_SEND.equals(in.getAction())) {
@@ -134,6 +141,18 @@ public class MainActivity extends Activity {
         }
         if (!prefs.ready()) tab = "setup";
         show(tab);
+        String crash = getSharedPreferences("cfg", MODE_PRIVATE).getString("crash", "");
+        if (!crash.isEmpty()) {
+            getSharedPreferences("cfg", MODE_PRIVATE).edit().remove("crash").apply();
+            TextView tv = t(crash.length() > 3000 ? crash.substring(0, 3000) : crash, 11, GREY, false);
+            tv.setTextIsSelectable(true);
+            tv.setPadding(dp(16), dp(8), dp(16), dp(8));
+            ScrollView s2 = new ScrollView(this);
+            s2.addView(tv);
+            new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+                    .setTitle("The app crashed last time — screenshot this").setView(s2)
+                    .setPositiveButton("OK", null).show();
+        }
     }
 
     // ---------------------------------------------------------------- UI helpers
