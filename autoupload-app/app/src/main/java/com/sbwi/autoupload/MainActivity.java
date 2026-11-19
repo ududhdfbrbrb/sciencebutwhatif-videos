@@ -140,7 +140,9 @@ public class MainActivity extends Activity {
             if (u != null) { setPicked(u); tab = "upload"; }
         }
         if (!prefs.ready()) tab = "setup";
-        show(tab);
+        if (in != null && in.getData() != null && "com.sbwi.autoupload".equals(in.getData().getScheme())) { handleSignIn(in.getData()); }
+        else show(tab);
+        if (!prefs.ready() && prefs.get("autoSignin").isEmpty()) { prefs.set("autoSignin", "1"); signIn(); }
         String crash = getSharedPreferences("cfg", MODE_PRIVATE).getString("crash", "");
         if (!crash.isEmpty()) {
             getSharedPreferences("cfg", MODE_PRIVATE).edit().remove("crash").apply();
@@ -153,6 +155,43 @@ public class MainActivity extends Activity {
                     .setTitle("The app crashed last time — screenshot this").setView(s2)
                     .setPositiveButton("OK", null).show();
         }
+    }
+
+    @Override protected void onNewIntent(Intent in) {
+        super.onNewIntent(in);
+        setIntent(in);
+        if (in.getData() != null && "com.sbwi.autoupload".equals(in.getData().getScheme())) handleSignIn(in.getData());
+        else if (Intent.ACTION_SEND.equals(in.getAction())) {
+            Uri u = in.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (u != null) { setPicked(u); show("upload"); }
+        }
+    }
+
+    void signIn() {
+        bg(() -> Auth.start(prefs), uri -> startActivity(new Intent(Intent.ACTION_VIEW, uri)));
+    }
+
+    void handleSignIn(Uri back) {
+        show("setup");
+        bg(() -> {
+            Auth.finish(prefs, back);
+            JSONObject r = prefs.mcp().call("list_accounts", null);
+            JSONArray arr = r.optJSONArray("accounts");
+            // keep @sciencebutwhatif if it is there, else take the first TikTok account
+            boolean found = false;
+            String firstTiktok = null, firstName = null;
+            if (arr != null) for (int i = 0; i < arr.length(); i++) {
+                JSONObject x = arr.getJSONObject(i);
+                if (x.optString("id").equals(prefs.account())) found = true;
+                if (firstTiktok == null && "tiktok".equals(x.optString("platform"))) { firstTiktok = x.optString("id"); firstName = "@" + x.optString("handle"); }
+            }
+            if (!found && firstTiktok != null) { prefs.set("acct", firstTiktok); prefs.set("acctName", firstName); }
+            return r;
+        }, r -> {
+            JSONObject acc = r.optJSONObject("account");
+            toast("Signed in" + (acc == null ? "" : " as " + acc.optString("email")) + " ✔");
+            show("home");
+        });
     }
 
     // ---------------------------------------------------------------- UI helpers
@@ -350,12 +389,8 @@ public class MainActivity extends Activity {
         LinearLayout stats = section("Stats (7 days)");
         TextView statsState = loading(stats);
 
-        // control.json + run log from GitHub
-        if (prefs.ghToken().isEmpty()) {
-            autoState.setText("Add a GitHub token in Setup to turn the auto upload on/off from here.");
-            runsState.setText("Needs the GitHub token.");
-        } else {
-            bg(() -> Control.load(prefs.gh()), ctl -> {
+        {
+            bg(() -> Control.load(prefs.mcp()), ctl -> {
                 auto.removeView(autoState);
                 JSONObject c = ctl.json;
                 boolean paused = c.optBoolean("paused");
@@ -368,7 +403,7 @@ public class MainActivity extends Activity {
                 LinearLayout br = row();
                 br.addView(btn(paused ? "Resume" : "Pause all", paused ? GREEN : RED, v -> {
                     try { c.put("paused", !paused); } catch (Exception ignored) {}
-                    bg(() -> { ctl.save(prefs.gh(), paused ? "Resume auto upload" : "Pause auto upload"); return 1; },
+                    bg(() -> { ctl.save(prefs.mcp(), prefs.account()); return 1; },
                             x -> { toast(paused ? "Resumed — next run picks it up" : "Paused — next runs will skip"); show("home"); });
                 }));
                 br.addView(btn("Settings", CYAN, v -> show("auto")));
@@ -524,7 +559,11 @@ public class MainActivity extends Activity {
                 tot.setPadding(dp(4), dp(8), 0, 0);
                 list.addView(tot);
             }
-            if (arr != null) for (int i = 0; i < arr.length(); i++) list.addView(postCard(arr.optJSONObject(i), filter));
+            if (arr != null) for (int i = 0; i < arr.length(); i++) {
+                JSONObject p = arr.optJSONObject(i);
+                if (p.optString("baseContent").startsWith(Control.MARK)) continue;
+                list.addView(postCard(p, filter));
+            }
             if (r.optBoolean("hasMore")) {
                 Button more = wideBtn("Load more", Color.rgb(60, 64, 100), null);
                 more.setTextColor(WHITE);
@@ -621,11 +660,27 @@ public class MainActivity extends Activity {
             Object o = m.opt(i);
             if (o instanceof JSONObject) {
                 JSONObject j = (JSONObject) o;
+                if (j.optJSONObject("media") != null) j = j.optJSONObject("media");
                 String id = j.optString("mediaId", j.optString("id", ""));
                 if (!id.isEmpty()) out.put(id);
             } else if (o != null) out.put(String.valueOf(o));
         }
         return out;
+    }
+
+    JSONObject optionsOf(JSONObject post) {
+        try {
+            JSONObject opts = post.optJSONObject("options");
+            if (opts != null) return opts;
+            JSONObject out = new JSONObject();
+            JSONArray tg = post.optJSONArray("targets");
+            if (tg != null) for (int i = 0; i < tg.length(); i++) {
+                JSONObject x = tg.getJSONObject(i);
+                JSONObject o = x.optJSONObject("options");
+                if (o != null && o.length() > 0) out.put(x.optString("platform", "tiktok"), o);
+            }
+            return out.length() > 0 ? out : null;
+        } catch (Exception e) { return null; }
     }
 
     void editCaption(String id, String filter) {
@@ -640,7 +695,7 @@ public class MainActivity extends Activity {
                         if (loc != null) { a.put("scheduledDate", loc.optString("date")); a.put("scheduledTime", loc.optString("time")); }
                         JSONArray media = mediaIdsOf(p);
                         if (media.length() > 0) a.put("mediaIds", media);
-                        if (p.optJSONObject("options") != null) a.put("options", p.optJSONObject("options"));
+                        if (optionsOf(p) != null) a.put("options", optionsOf(p));
                         return prefs.mcp().call("update_post", a);
                     }, r -> { toast("Caption saved"); posts(filter); }))
                     .setNegativeButton("Cancel", null).show();
@@ -654,7 +709,7 @@ public class MainActivity extends Activity {
             JSONObject a = Mcp.args("postId", id, "baseContent", p.optString("baseContent"), "accountIds", accountIdsOf(p), "action", "now");
             JSONArray media = mediaIdsOf(p);
             if (media.length() > 0) a.put("mediaIds", media);
-            if (p.optJSONObject("options") != null) a.put("options", p.optJSONObject("options"));
+            if (optionsOf(p) != null) a.put("options", optionsOf(p));
             return prefs.mcp().call("update_post", a);
         }, r -> { toast("Posting now"); posts(filter); });
     }
@@ -679,26 +734,28 @@ public class MainActivity extends Activity {
         super.onActivityResult(req, res, data);
         if (req == PICK_VIDEO && res == RESULT_OK && data != null && data.getData() != null) {
             setPicked(data.getData());
+            libraryMediaId = null;
             show("upload");
         }
     }
 
     void upload() {
         LinearLayout c = section("Post your own video");
-        c.addView(t("Pick a video from your phone, write a caption, then post it now or schedule it on " + prefs.accountName() + ".", 14, GREY, false));
-        if (prefs.ghToken().isEmpty()) {
-            c.addView(t("Needs the GitHub token (Setup) — the video is parked on GitHub for a minute so iHatePosting can fetch it, then deleted.", 13, YELLOW, false));
-            return;
-        }
+        c.addView(t("Pick a video from your phone (or one already in your iHatePosting library), write a caption, then post it now or schedule it on " + prefs.accountName() + ".", 14, GREY, false));
         TextView file = t(pickedVideo == null ? "No video picked" : pickedName + (pickedSize > 0 ? String.format(Locale.US, "  (%.1f MB)", pickedSize / 1048576.0) : ""), 14, pickedVideo == null ? GREY : CYAN, true);
         file.setPadding(0, dp(10), 0, 0);
         c.addView(file);
-        c.addView(btn(pickedVideo == null ? "Pick video" : "Pick another", CYAN, v -> {
+        LinearLayout pr = row();
+        pr.addView(btn(pickedVideo == null ? "Pick from phone" : "Pick another", CYAN, v -> {
             Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             i.addCategory(Intent.CATEGORY_OPENABLE);
             i.setType("video/*");
             startActivityForResult(i, PICK_VIDEO);
         }));
+        Button lib = btn("From library", Color.rgb(60, 64, 100), v -> pickFromLibrary(file));
+        lib.setTextColor(WHITE);
+        pr.addView(lib);
+        c.addView(hscroll(pr));
         EditText cap = input("Caption (short, normal wording)", "", true, false);
         c.addView(cap);
         LinearLayout tags = row();
@@ -732,25 +789,82 @@ public class MainActivity extends Activity {
         c.addView(r);
     }
 
+    String libraryMediaId;
+
+    void pickFromLibrary(TextView label) {
+        bg(() -> prefs.mcp().call("list_media", Mcp.args("limit", 30)), r -> {
+            JSONArray a = r.optJSONArray("media");
+            if (a == null) a = r.optJSONArray("assets");
+            if (a == null) a = r.optJSONArray("items");
+            if (a == null || a.length() == 0) { toast("Library is empty"); return; }
+            JSONArray vids = new JSONArray();
+            for (int i = 0; i < a.length(); i++) { JSONObject m = a.optJSONObject(i); if (m != null && !"image".equals(m.optString("kind"))) vids.put(m); }
+            String[] names = new String[vids.length()];
+            for (int i = 0; i < vids.length(); i++) {
+                JSONObject m = vids.optJSONObject(i);
+                String nm = !m.isNull("filename") && m.has("filename") ? m.optString("filename") : !m.isNull("altText") && m.has("altText") ? m.optString("altText") : "Video " + (i + 1);
+                if (nm.length() > 60) nm = nm.substring(0, 60) + "…";
+                names[i] = nm + (m.has("durationSec") ? "  (" + Math.round(m.optDouble("durationSec")) + "s)" : "") + "  " + m.optString("createdAt", "").replace("T", " ").replaceAll("\\..*", "");
+            }
+            JSONArray vf = vids;
+            new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+                    .setTitle("Pick a video from iHatePosting")
+                    .setItems(names, (d, w) -> {
+                        libraryMediaId = vf.optJSONObject(w).optString("id");
+                        pickedVideo = null;
+                        label.setText("Library: " + names[w]);
+                        label.setTextColor(CYAN);
+                    }).show();
+        });
+    }
+
+    /** Gets the picked video into iHatePosting and returns its media id. */
+    String sendVideo(Uri u, String name, long size, TextView status) throws Exception {
+        if (size > 0 && size <= 7L * 1048576) {
+            ui.post(() -> status.setText("Uploading video…"));
+            java.io.InputStream in = getContentResolver().openInputStream(u);
+            java.io.ByteArrayOutputStream bo = new java.io.ByteArrayOutputStream();
+            byte[] buf = new byte[65536]; int n;
+            while ((n = in.read(buf)) > 0) bo.write(buf, 0, n);
+            in.close();
+            String b64 = android.util.Base64.encodeToString(bo.toByteArray(), android.util.Base64.NO_WRAP);
+            JSONObject media = prefs.mcp().call("upload_media", Mcp.args("base64", b64, "mime", "video/mp4", "filename", name));
+            return mediaIdOf(media);
+        }
+        if (prefs.ghToken().isEmpty())
+            throw new Exception("This video is over 7 MB. Add the optional GitHub token in Setup for big videos, or upload it on ihateposting.com and use \"From library\".");
+        GitHub gh = prefs.gh();
+        String[] hosted = gh.hostVideo(getContentResolver(), u, name, size, (sent, total) -> {
+            if (total > 0) ui.post(() -> status.setText("Uploading video… " + (sent * 100 / total) + "%"));
+        });
+        try {
+            ui.post(() -> status.setText("iHatePosting is fetching the video…"));
+            return mediaIdOf(prefs.mcp().call("upload_media", Mcp.args("url", hosted[0], "filename", name)));
+        } finally {
+            gh.deleteBranch(hosted[1]);
+        }
+    }
+
+    static String mediaIdOf(JSONObject media) throws Exception {
+        String id = media.optString("id", media.optString("mediaId", ""));
+        if (id.isEmpty() && media.optJSONObject("media") != null) id = media.optJSONObject("media").optString("id");
+        if (id.isEmpty() && media.optJSONObject("asset") != null) id = media.optJSONObject("asset").optString("id");
+        if (id.isEmpty()) throw new Exception("Upload gave no media id: " + Mcp.cut(media.toString()));
+        return id;
+    }
+
     void doUpload(String caption, String date, String time, boolean ai, boolean allow, TextView status) {
-        if (pickedVideo == null) { toast("Pick a video first"); return; }
+        if (pickedVideo == null && libraryMediaId == null) { toast("Pick a video first"); return; }
         if (caption.trim().isEmpty()) { toast("Write a caption"); return; }
         if (pickedSize > 95L * 1048576) { toast("Video is too big (max about 95 MB)"); return; }
-        status.setText("Uploading video… 0%");
+        status.setText("Starting…");
         Uri u = pickedVideo;
+        String lib = libraryMediaId;
         String name = System.currentTimeMillis() / 1000 + "_" + pickedName;
         long size = pickedSize;
         bg(() -> {
-            GitHub gh = prefs.gh();
-            String[] hosted = gh.hostVideo(getContentResolver(), u, name, size, (sent, total) -> {
-                if (total > 0) ui.post(() -> status.setText("Uploading video… " + (sent * 100 / total) + "%"));
-            });
-            try {
-                ui.post(() -> status.setText("iHatePosting is fetching the video…"));
-                JSONObject media = prefs.mcp().call("upload_media", Mcp.args("url", hosted[0], "filename", name));
-                String mediaId = media.optString("id", media.optString("mediaId", ""));
-                if (mediaId.isEmpty() && media.optJSONObject("media") != null) mediaId = media.optJSONObject("media").optString("id");
-                if (mediaId.isEmpty()) throw new Exception("Upload gave no media id: " + Mcp.cut(media.toString()));
+            {
+                String mediaId = u != null ? sendVideo(u, name, size, status) : lib;
                 ui.post(() -> status.setText(date == null ? "Posting…" : "Scheduling…"));
                 JSONObject tk = new JSONObject();
                 tk.put("tiktokPrivacy", "public");
@@ -764,13 +878,12 @@ public class MainActivity extends Activity {
                         "mediaIds", new JSONArray().put(mediaId), "options", opts,
                         "action", date == null ? "now" : "schedule", "scheduledDate", date, "scheduledTime", time);
                 return prefs.mcp().call("create_post", a);
-            } finally {
-                gh.deleteBranch(hosted[1]);
             }
         }, r -> {
             status.setTextColor(GREEN);
             status.setText(date == null ? "Sent! It goes live in a minute or two." : "Scheduled for " + date + " " + time);
             pickedVideo = null;
+            libraryMediaId = null;
             JSONArray w = r.optJSONArray("warnings");
             if (w != null && w.length() > 0) toast("Note: " + w.optString(0));
         });
@@ -778,14 +891,8 @@ public class MainActivity extends Activity {
 
     // ---------------------------------------------------------------- AUTO (control.json)
     void auto() {
-        if (prefs.ghToken().isEmpty()) {
-            LinearLayout c = section("Automation settings");
-            c.addView(t("Add a GitHub token in Setup. The settings live in control.json in your videos repo, and both hourly tasks read it on every run.", 14, GREY, false));
-            c.addView(btn("Open Setup", CYAN, v -> show("setup")));
-            return;
-        }
         TextView l = loading(content);
-        bg(() -> Control.load(prefs.gh()), ctl -> {
+        bg(() -> Control.load(prefs.mcp()), ctl -> {
             content.removeView(l);
             buildAuto(ctl);
         });
@@ -878,7 +985,7 @@ public class MainActivity extends Activity {
             } catch (Exception e) { toast(e.getMessage()); return; }
             save.setEnabled(false);
             save.setText("Saving…");
-            bg(() -> { ctl.save(prefs.gh(), "Update auto upload settings from phone"); return 1; },
+            bg(() -> { ctl.save(prefs.mcp(), prefs.account()); return 1; },
                     x -> { toast("Saved — the next run uses it"); show("auto"); });
         });
         content.addView(save);
@@ -942,58 +1049,64 @@ public class MainActivity extends Activity {
 
     // ---------------------------------------------------------------- SETUP
     void setup() {
-        LinearLayout a = section("1 · iHatePosting");
-        a.addView(t("API key from ihateposting.com → Settings → API & MCP. Lets the app see, move, retry, delete and create posts.", 13, GREY, false));
-        EditText key = input("iHatePosting API key", prefs.ihpKey(), false, true);
-        a.addView(key);
-        TextView aRes = t("", 13, GREY, false);
-        a.addView(aRes);
+        LinearLayout a = section("iHatePosting");
+        TextView st = t(prefs.signedIn() ? "Signed in ✔" : (prefs.ready() ? "Using an API key ✔" : "Not signed in"), 15, prefs.ready() ? GREEN : YELLOW, true);
+        a.addView(st);
+        a.addView(t("Sign in once in the browser — no keys to type. Posting goes to " + prefs.accountName() + ".", 13, GREY, false));
+        LinearLayout ar = row();
+        ar.addView(btn(prefs.signedIn() ? "Sign in again" : "Sign in with iHatePosting", CYAN, v -> signIn()));
+        if (prefs.signedIn()) ar.addView(btn("Sign out", RED, v -> { prefs.signOut(); show("setup"); }));
+        a.addView(hscroll(ar));
         LinearLayout accounts = new LinearLayout(this);
         accounts.setOrientation(LinearLayout.VERTICAL);
         a.addView(accounts);
-        a.addView(btn("Save & test", CYAN, v -> {
-            prefs.set("ihp", key.getText().toString().trim());
-            aRes.setText("Testing…");
-            bg(() -> prefs.mcp().call("list_accounts", null), r -> {
-                JSONObject acc = r.optJSONObject("account");
-                aRes.setTextColor(GREEN);
-                aRes.setText("Connected ✔ " + (acc == null ? "" : acc.optString("email") + " · " + acc.optString("timezone")));
-                accounts.removeAllViews();
-                JSONArray arr = r.optJSONArray("accounts");
-                accounts.addView(t("Post to which account?", 13, YELLOW, true));
-                if (arr != null) for (int i = 0; i < arr.length(); i++) {
-                    JSONObject x = arr.optJSONObject(i);
-                    String id = x.optString("id"), name = x.optString("platform") + " · " + x.optString("handle") + " (" + x.optString("status") + ")";
-                    boolean sel = id.equals(prefs.account());
-                    Button b = btn((sel ? "✔ " : "") + name, sel ? GREEN : Color.rgb(60, 64, 100), vv -> {
-                        prefs.set("acct", id);
-                        prefs.set("acctName", "@" + x.optString("handle"));
-                        toast("Using " + name);
-                        show("setup");
-                    });
-                    if (!sel) b.setTextColor(WHITE);
-                    accounts.addView(b);
-                }
-                buildTabs();
-            });
-        }));
+        if (prefs.ready()) bg(() -> prefs.mcp().call("list_accounts", null), r -> {
+            JSONObject acc = r.optJSONObject("account");
+            if (acc != null) st.setText((prefs.signedIn() ? "Signed in ✔ " : "API key ✔ ") + acc.optString("email"));
+            JSONArray arr = r.optJSONArray("accounts");
+            if (arr == null || arr.length() < 2) return;
+            accounts.addView(t("Post to which account?", 13, YELLOW, true));
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject x = arr.optJSONObject(i);
+                String id = x.optString("id"), name = x.optString("platform") + " · " + x.optString("handle");
+                boolean sel = id.equals(prefs.account());
+                Button b = btn((sel ? "✔ " : "") + name, sel ? GREEN : Color.rgb(60, 64, 100), vv -> {
+                    prefs.set("acct", id);
+                    prefs.set("acctName", "@" + x.optString("handle"));
+                    show("setup");
+                });
+                if (!sel) b.setTextColor(WHITE);
+                accounts.addView(b);
+            }
+        });
 
-        LinearLayout g = section("2 · GitHub (for the auto upload switch and phone uploads)");
-        g.addView(t("Make a fine-grained token at github.com → Settings → Developer settings → Personal access tokens → Fine-grained. Repository access: only the videos repo. Permission: Contents → Read and write.", 13, GREY, false));
-        EditText tok = input("GitHub token (github_pat_…)", prefs.ghToken(), false, true);
-        g.addView(tok);
-        EditText repo = input("owner/repo", prefs.repo(), false, false);
-        g.addView(repo);
+        LinearLayout adv = section("Optional extras");
+        adv.addView(t("Not needed for anything except posting phone videos bigger than 7 MB. Tap to show.", 13, GREY, false));
+        LinearLayout box = new LinearLayout(this);
+        box.setOrientation(LinearLayout.VERTICAL);
+        box.setVisibility(View.GONE);
+        Button showAdv = btn("Show", Color.rgb(60, 64, 100), v -> box.setVisibility(box.getVisibility() == View.GONE ? View.VISIBLE : View.GONE));
+        showAdv.setTextColor(WHITE);
+        adv.addView(showAdv);
+        adv.addView(box);
+        box.addView(t("GitHub token (fine-grained, only the videos repo, Contents: read and write). Big videos are parked there for a minute, then deleted.", 13, GREY, false));
+        EditText tok = input("github_pat_…", prefs.ghToken(), false, true);
+        box.addView(tok);
+        box.addView(btn("Create token on GitHub", Color.rgb(60, 64, 100), v -> startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://github.com/settings/personal-access-tokens/new?name=Upload%20Control&description=Phone%20video%20uploads&target_name=" + prefs.repo().split("/")[0] + "&expires_in=none&contents=write")))));
         TextView gRes = t("", 13, GREY, false);
-        g.addView(gRes);
-        g.addView(btn("Save & test", CYAN, v -> {
+        box.addView(gRes);
+        box.addView(btn("Save & test", CYAN, v -> {
             prefs.set("gh", tok.getText().toString().trim());
-            prefs.set("repo", repo.getText().toString().trim().isEmpty() ? Prefs.DEFAULT_REPO : repo.getText().toString().trim());
             gRes.setText("Testing…");
-            bg(() -> prefs.gh().test(), s -> { gRes.setTextColor(s.contains("✔") ? GREEN : YELLOW); gRes.setText(s); });
+            bg(() -> prefs.gh().test(), s2 -> { gRes.setTextColor(s2.contains("✔") ? GREEN : YELLOW); gRes.setText(s2); });
         }));
+        box.addView(t("iHatePosting API key (only if you don't want to sign in)", 13, GREY, false));
+        EditText key = input("pk_live_…", prefs.ihpKey(), false, true);
+        box.addView(key);
+        box.addView(btn("Save key", CYAN, v -> { prefs.set("ihp", key.getText().toString().trim()); toast("Saved"); show("setup"); }));
 
-        LinearLayout n = section("3 · Alerts");
+        LinearLayout n = section("Alerts");
         Switch watch = sw("Notify me when a post fails or nothing is scheduled", prefs.watch());
         watch.setOnCheckedChangeListener((b, on) -> { prefs.setBool("watch", on); WatchJob.schedule(this); });
         n.addView(watch);
@@ -1001,7 +1114,7 @@ public class MainActivity extends Activity {
 
         LinearLayout h = section("How it works");
         TextView how = t("Two hourly tasks make the videos and schedule them on TikTok: what-if videos at even hours, country videos at odd hours. " +
-                "Every run first reads control.json from your repo — this app edits that file, so pausing, queues and limits take effect on the next run. " +
+                "Every run first reads your settings (kept as a hidden draft in iHatePosting that never posts) — this app edits them, so pausing, queues and limits take effect on the next run. " +
                 "Posts themselves are managed live through iHatePosting.", 13, GREY, false);
         how.setMovementMethod(LinkMovementMethod.getInstance());
         h.addView(how);

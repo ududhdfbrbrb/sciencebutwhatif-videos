@@ -63,10 +63,7 @@ public class WatchJob extends JobService {
         JSONObject sch = m.call("list_posts", Mcp.args("status", "scheduled", "limit", 1));
         if (sch.optInt("total", 1) == 0) {
             boolean paused = false;
-            try {
-                GitHub.FileData f = p.gh().get("control.json");
-                if (f != null) paused = new JSONObject(f.text).optBoolean("paused");
-            } catch (Exception ignored) {}
+            try { paused = Control.load(m).json.optBoolean("paused"); } catch (Exception ignored) {}
             long nowMs = System.currentTimeMillis();
             if (!paused && nowMs - p.lastStuckAlert() > 3 * 3600_000L) {
                 p.setLong("stuck", nowMs);

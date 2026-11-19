@@ -12,13 +12,25 @@ import java.nio.charset.StandardCharsets;
 
 /** Tiny MCP (Streamable HTTP) client for the iHatePosting server. */
 public class Mcp {
-    static final String ENDPOINT = "https://ihateposting.com/mcp?client=uploadcontrol";
-    private final String key;
+    static final String KEY_ENDPOINT = "https://ihateposting.com/mcp?client=uploadcontrol";
+    static final String OAUTH_ENDPOINT = "https://ihateposting.com/mcp/oauth";
+    private final Prefs prefs;
     private String session;
     private int nextId = 1;
     private boolean ready;
+    private boolean retried401;
 
-    public Mcp(String key) { this.key = key == null ? "" : key.trim(); }
+    public Mcp(Prefs p) { this.prefs = p; }
+
+    private boolean oauth() { return prefs.signedIn(); }
+
+    private String bearer() {
+        if (oauth()) {
+            if (System.currentTimeMillis() > prefs.getLong("accessExp")) Auth.refresh(prefs);
+            return prefs.get("access");
+        }
+        return prefs.ihpKey().trim();
+    }
 
     static String readAll(InputStream is) throws Exception {
         if (is == null) return "";
@@ -31,12 +43,12 @@ public class Mcp {
     }
 
     private JSONObject rpc(String method, JSONObject params, boolean notification) throws Exception {
-        HttpURLConnection c = (HttpURLConnection) new URL(ENDPOINT).openConnection();
+        HttpURLConnection c = (HttpURLConnection) new URL(oauth() ? OAUTH_ENDPOINT : KEY_ENDPOINT).openConnection();
         c.setRequestMethod("POST");
         c.setDoOutput(true);
         c.setConnectTimeout(20000);
         c.setReadTimeout(180000);
-        c.setRequestProperty("Authorization", "Bearer " + key);
+        c.setRequestProperty("Authorization", "Bearer " + bearer());
         c.setRequestProperty("Content-Type", "application/json");
         c.setRequestProperty("Accept", "application/json, text/event-stream");
         c.setRequestProperty("MCP-Protocol-Version", "2025-03-26");
@@ -54,7 +66,8 @@ public class Mcp {
         String sid = c.getHeaderField("Mcp-Session-Id");
         if (sid != null) session = sid;
         String txt = readAll(code >= 400 ? c.getErrorStream() : c.getInputStream());
-        if (code == 401 || code == 403) throw new Exception("iHatePosting API key rejected (" + code + "). Check it in Setup.");
+        if (code == 401 && oauth() && !retried401) { retried401 = true; if (Auth.refresh(prefs)) { ready = false; session = null; throw new SessionGone(); } }
+        if (code == 401 || code == 403) throw new Exception(oauth() ? "Signed out of iHatePosting. Sign in again in Setup." : "iHatePosting API key rejected (" + code + "). Check it in Setup.");
         if (code == 404 && session != null) { session = null; ready = false; throw new SessionGone(); }
         if (notification) return null;
         if (code >= 400) throw new Exception("iHatePosting HTTP " + code + ": " + cut(txt));
