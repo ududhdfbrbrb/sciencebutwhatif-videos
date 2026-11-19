@@ -15,3 +15,5 @@
 2026-11-18 capital ar/vn/mn
 2026-11-18 ranking most visited countries, international tourist arrivals 2024 (Go2Africa via Forbes Australia)
 2026-11-18 crazyfacts br/mg/nr
+2026-11-19 ranking most forest area (FAO Global Forest Resources Assessment 2025)
+2026-11-19 landmark eg/cl/mm

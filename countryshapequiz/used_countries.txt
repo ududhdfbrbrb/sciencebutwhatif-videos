@@ -55,3 +55,9 @@ fr|FRANCE|#1: 100 million tourists
 br|BRAZIL|Visiting its deadly snake island is banned
 mg|MADAGASCAR|About 90% of its wildlife lives nowhere else
 nr|NAURU|This country has no official capital city
+ca|CANADA|#3: 369 million hectares
+br|BRAZIL|#2: 486 million hectares
+ru|RUSSIA|#1: 833 million hectares
+eg|EGYPT|Home of the Great Pyramid of Giza
+cl|CHILE|Home of the Easter Island moai
+mm|MYANMAR|Home of the golden Shwedagon Pagoda
