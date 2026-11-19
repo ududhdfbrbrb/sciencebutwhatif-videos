@@ -1,0 +1,65 @@
+name: Build Upload Control APK
+on:
+  push:
+    branches: [main]
+    paths: ['autoupload-app/**', '.github/workflows/upload-control-apk.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            autoupload-app
+            .github
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '8.7' }
+      - name: Build
+        id: build
+        working-directory: autoupload-app
+        run: |
+          set -o pipefail
+          gradle assembleRelease --no-daemon --stacktrace 2>&1 | tee build.log
+        continue-on-error: true
+      - name: Enable KVM
+        if: steps.build.outcome == 'success'
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Launch test on Android 14 emulator
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: 20
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash autoupload-app/smoketest.sh
+      - name: Publish result to apk branch
+        run: |
+          mkdir out
+          cp autoupload-app/smoke.txt out/smoke.txt || true
+          cp autoupload-app/smoke.png out/smoke.png || true
+          cp autoupload-app/build.log out/build.log || true
+          if [ -f autoupload-app/app/build/outputs/apk/release/app-release.apk ]; then
+            cp autoupload-app/app/build/outputs/apk/release/app-release.apk out/UploadControl.apk
+            echo "ok ${GITHUB_SHA}" > out/STATUS
+          else
+            echo "fail ${GITHUB_SHA}" > out/STATUS
+          fi
+          cd out
+          git init -q -b apk
+          git config user.name "github-actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -qm "Upload Control build ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" apk
