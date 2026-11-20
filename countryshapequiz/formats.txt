@@ -26,3 +26,4 @@
 2026-11-20 ranking most rain (average annual precipitation, World Bank data)
 2026-11-20 landmark gb/my/tm
 2026-11-20 ranking fastest home internet (Ookla Speedtest Global Index, June 2026)
+2026-11-20 ranking tea consumption per person (Euromonitor 2016 via Wikipedia)
