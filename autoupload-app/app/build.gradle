@@ -1,0 +1,25 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.sbwi.autoupload'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'com.sbwi.autoupload'
+        minSdk 26
+        targetSdk 34
+        versionCode 3
+        versionName '1.2'
+    }
+    signingConfigs {
+        release {
+            storeFile file('release.jks')
+            storePassword 'autoupload123'
+            keyAlias 'upload'
+            keyPassword 'autoupload123'
+        }
+    }
+    buildTypes {
+        release { minifyEnabled false; signingConfig signingConfigs.release }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    lint { abortOnError false; checkReleaseBuilds false }
+}
