@@ -85,3 +85,6 @@ co|COLOMBIA|#1: 3,240 mm per year
 gb|UNITED KINGDOM|Home of Stonehenge
 my|MALAYSIA|Home of the Petronas Twin Towers
 tm|TURKMENISTAN|Home of the Door to Hell gas crater
+ae|UAE|#3: 379 Mbps median download
+cl|CHILE|#2: 393 Mbps median download
+sg|SINGAPORE|#1: 448 Mbps median download

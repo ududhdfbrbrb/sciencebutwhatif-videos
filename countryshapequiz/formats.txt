@@ -25,3 +25,4 @@
 2026-11-20 animals th/pk/bw
 2026-11-20 ranking most rain (average annual precipitation, World Bank data)
 2026-11-20 landmark gb/my/tm
+2026-11-20 ranking fastest home internet (Ookla Speedtest Global Index, June 2026)

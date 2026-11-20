@@ -263,8 +263,11 @@ def frame_at(t):
     TOP = 380
     if ci is None and t < INTRO:
         # full-size from frame 0 so the TikTok cover shows the title
-        draw_text(pil, CFG.get('title', 'GUESS THE COUNTRY'), TOP, 104, 1, stroke=12)
-        draw_text(pil, CFG.get('subtitle', 'by its shape only'), TOP + 175, 64, 1, fill=(255, 214, 64), stroke=9)
+        _tt = CFG.get('title', 'GUESS THE COUNTRY'); _tl = len(wrap(_tt, font(104), 940))
+        draw_text(pil, _tt, TOP, 104, 1, stroke=12)
+        # subtitle sits below the title, even when the title wraps to 2+ lines
+        draw_text(pil, CFG.get('subtitle', 'by its shape only'), None, 64, 1, fill=(255, 214, 64), stroke=9,
+                  top=TOP - int(104 * 1.18) * _tl / 2 + int(104 * 1.18) * _tl + 18)
     elif ci is None:
         draw_text(pil, 'How many did you get?', TOP + 20, 96, pop(lt - 0.2), stroke=12)
         draw_text(pil, 'Comment your score', 1560, 72, pop(lt - 0.9), fill=(255, 214, 64), stroke=10)

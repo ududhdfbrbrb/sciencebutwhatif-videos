@@ -7,3 +7,4 @@
 2026-11-20 01:50 country ranking: highest countries by average elevation | animals: th/pk/bw -> live 03:00 (temp branches not deleted: remote refused)
 2026-11-20 02:10 whatif What if you could hear the Sun? | What if you lived on the Moon? -> live 04:00 (temp branches not deleted: remote refused)
 2026-11-20 04:08 country ranking: most rain | landmark: gb/my/tm -> live 05:00
+2026-11-20 11:41 country ranking: fastest home internet (sg/cl/ae) -> live 13:02 (only 1 video: daily limit 14/15; TikTok cap allowed from 13:01)
