@@ -9,3 +9,4 @@
 2026-11-20 04:08 country ranking: most rain | landmark: gb/my/tm -> live 05:00
 2026-11-20 11:41 country ranking: fastest home internet (sg/cl/ae) -> live 13:02 (only 1 video: daily limit 14/15; TikTok cap allowed from 13:01)
 2026-11-20 21:45 country ranking: most tea per person (gb/ie/tr) -> live 23:00 (only 1 video: second render (capital de/kz/bf) too slow to finish before 23:02; temp branches not deleted: remote refused)
+2026-11-20 22:09 whatif What if you lived on Titan? -> live 00:00 (only 1 video: daily limit 14/15; temp branch not deleted: remote refused)
