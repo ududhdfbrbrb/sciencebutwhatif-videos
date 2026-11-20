@@ -14,3 +14,4 @@ most McDonald's restaurants
 most volcanoes (Smithsonian GVP Holocene)
 most living languages (Ethnologue 2025)
 highest countries (average elevation, CIA World Factbook)
+most rain (average annual precipitation, World Bank)

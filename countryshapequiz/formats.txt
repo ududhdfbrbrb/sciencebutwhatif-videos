@@ -23,3 +23,5 @@
 2026-11-19 food kr/pt/et
 2026-11-20 ranking highest countries by average elevation (CIA World Factbook via Wikipedia)
 2026-11-20 animals th/pk/bw
+2026-11-20 ranking most rain (average annual precipitation, World Bank data)
+2026-11-20 landmark gb/my/tm
