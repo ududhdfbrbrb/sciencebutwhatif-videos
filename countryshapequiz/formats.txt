@@ -21,3 +21,5 @@
 2026-11-19 ranking most volcanoes (Smithsonian Global Volcanism Program, Holocene volcanoes by country)
 2026-11-19 ranking most living languages (Ethnologue 2025 via Intelpoint)
 2026-11-19 food kr/pt/et
+2026-11-20 ranking highest countries by average elevation (CIA World Factbook via Wikipedia)
+2026-11-20 animals th/pk/bw

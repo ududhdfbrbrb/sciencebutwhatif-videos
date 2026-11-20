@@ -73,3 +73,9 @@ pg|PAPUA NEW GUINEA|#1: 843 living languages
 kr|SOUTH KOREA|Famous for kimchi
 pt|PORTUGAL|Famous for pastel de nata
 et|ETHIOPIA|Famous for injera flatbread
+tj|TAJIKISTAN|#3: 3,186 m on average
+np|NEPAL|#2: 3,265 m on average
+bt|BHUTAN|#1: 3,280 m on average
+th|THAILAND|National animal: the elephant
+pk|PAKISTAN|National animal: the markhor goat
+bw|BOTSWANA|National animal: the zebra

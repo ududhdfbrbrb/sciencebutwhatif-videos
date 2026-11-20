@@ -4,3 +4,4 @@
 2026-11-19 22:14 whatif What if you fell into Jupiter? | What if all the fish disappeared? -> live 00:00
 2026-11-19 23:53 country ranking: most living languages | food: kr/pt/et -> live 01:00 (temp branches not deleted: remote refused)
 2026-11-20 00:11 whatif What if you dove to the Mariana Trench? | What if Earth orbited a red dwarf? -> live 02:00 (temp branches not deleted: remote refused)
+2026-11-20 01:50 country ranking: highest countries by average elevation | animals: th/pk/bw -> live 03:00 (temp branches not deleted: remote refused)
