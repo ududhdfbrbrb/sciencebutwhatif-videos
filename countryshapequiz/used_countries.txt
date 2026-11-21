@@ -97,3 +97,6 @@ ca|CANADA|#1: 202,080 km of coastline
 gr|GREECE|Has about 6,000 islands and islets
 sa|SAUDI ARABIA|Covers most of the Arabian Peninsula
 la|LAOS|Southeast Asia's only landlocked country
+de|GERMANY|Capital: Berlin
+ma|MOROCCO|Capital: Rabat
+kz|KAZAKHSTAN|Capital: Astana
