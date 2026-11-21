@@ -2,7 +2,13 @@
 """3D version of the IN THIS TOWN renderer (three.js in headless Chromium + PIL captions).
 Usage: python3 town3d.py story.json out.mp4 [--still t1 t2 ... --sheet sheet.jpg]
 Same story.json as townstory.py (see its docstring). Extra beat keys: "cam": in|out|left|right|up|close,
-"clock_stopped": true (tower clock hands freeze), "night": true. Scenes: lake, jetty, square, street,
+"clock_stopped": true (tower clock AND everything freezes: people, birds, water; light blue tint),
+"freeze": true (time freezes without mentioning the clock), "freeze_except": ["me"] (who keeps moving),
+"mood": "scared" or {"me":"scared","ivy":"creepy"} (faces: smile, neutral, scared, surprised, sad, laugh, creepy),
+"pose": "walk" or {"me":"scared"} (poses: idle, walk, scared, laugh, point, wave, shrug, hug), "focus": who the
+"close" camera frames, "night": true. Without mood/pose, faces and poses are guessed from the caption words
+(scared/afraid -> scared face + arms up stepping back, laughed -> laugh, whispered -> creepy, ...), and positions
+shift a little per beat so shots differ. Scenes: lake, jetty, square, street,
 classroom, kitchen, bedroom, hallway. Render speed is roughly 3-5 frames/s, so an 80 s story takes ~10 min:
 run it in the background with nohup and poll the log."""
 import sys, os, json, io, struct, subprocess, math
@@ -38,6 +44,7 @@ def main():
         b = story['beats'][cur['beat']]
         img = img3.resize((W, H), Image.LANCZOS)
         if b.get('gray'): img = Image.merge('RGBA', (*[img.convert('L')] * 3, img.split()[3]))
+        if b.get('freeze') or b.get('clock_stopped'): img.alpha_composite(Image.new('RGBA', (W, H), (150, 190, 255, 38)))
         if b.get('tint'): img.alpha_composite(Image.new('RGBA', (W, H), tuple(b['tint']) + (90,)))
         if cur['day']:
             img.alpha_composite(Image.new('RGBA', (W, H), (0, 0, 0, 90))); ts.draw_daycard(img, cur['day'], t - cur['start'])

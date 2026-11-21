@@ -13,7 +13,9 @@
 "who": [
 "mayor"
 ],
-"text": "It stopped when the mayor said the new road would be *finished by spring.*"
+"text": "It stopped when the mayor said the new road would be *finished by spring.*",
+"mood": "creepy",
+"pose": "shrug"
 },
 {
 "scene": "kitchen",
@@ -22,7 +24,15 @@
 "nan"
 ],
 "prop": "cake",
-"text": "It stopped when Grandad told Nan he'd quit eating *cake.*"
+"text": "It stopped when Grandad told Nan he'd quit eating *cake.*",
+"mood": {
+"grandad": "surprised",
+"nan": "creepy"
+},
+"pose": {
+"grandad": "shrug",
+"nan": "point"
+}
 },
 {
 "scene": "street",
@@ -31,7 +41,8 @@
 "girl",
 "man"
 ],
-"text": "So in this town, nobody lies. *Ever.*"
+"text": "So in this town, nobody lies. *Ever.*",
+"pose": "walk"
 },
 {
 "scene": "street",
@@ -43,7 +54,15 @@
 "me",
 "ivy"
 ],
-"text": "A new girl moved in next door. Her name was ~Ivy.~"
+"text": "A new girl moved in next door. Her name was ~Ivy.~",
+"pose": {
+"me": "wave",
+"ivy": "idle"
+},
+"mood": {
+"me": "smile",
+"ivy": "neutral"
+}
 },
 {
 "scene": "classroom",
@@ -55,7 +74,15 @@
 "ivy",
 "teacher"
 ],
-"text": "In class, she said she'd lived here *before.* Everyone laughed."
+"text": "In class, she said she'd lived here *before.* Everyone laughed.",
+"mood": {
+"ivy": "neutral",
+"teacher": "laugh"
+},
+"pose": {
+"ivy": "idle",
+"teacher": "laugh"
+}
 },
 {
 "scene": "square",
@@ -71,7 +98,9 @@
 "ivy"
 ],
 "prop": "cat",
-"text": "She knew exactly where Mrs. Green's lost cat was hiding. *Before anyone told her.*"
+"text": "She knew exactly where Mrs. Green's lost cat was hiding. *Before anyone told her.*",
+"mood": "creepy",
+"pose": "point"
 },
 {
 "scene": "lake",
@@ -91,8 +120,13 @@
 "me",
 "ivy"
 ],
-"cam": "in",
-"text": "\"When?\" I asked. She looked up at the tower. *\"Before it was built.\"*"
+"cam": "close",
+"text": "\"When?\" I asked. She looked up at the tower. *\"Before it was built.\"*",
+"mood": {
+"me": "surprised",
+"ivy": "creepy"
+},
+"focus": "ivy"
 },
 {
 "scene": "square",
@@ -109,14 +143,24 @@
 "me"
 ],
 "gray": true,
-"text": "I found her name carved into the oldest bench by the lake. Next to a date: *1874.*"
+"text": "I found her name carved into the oldest bench by the lake. Next to a date: *1874.*",
+"mood": "scared",
+"pose": "scared"
 },
 {
 "scene": "square",
 "night": true,
 "clock_stopped": true,
 "cam": "in",
-"text": "That night, for the first time in *forty years,* the clock !stopped.!"
+"text": "That night, for the first time in *forty years,* the clock !stopped.!",
+"who": [
+"man",
+"woman",
+"kid"
+],
+"pose": "walk",
+"mood": "neutral",
+"freeze": true
 },
 {
 "scene": "bedroom",
@@ -124,8 +168,20 @@
 "me",
 "mum"
 ],
-"cam": "close",
-"text": "Because I told my mum I wasn't !scared.!"
+"cam": "in",
+"text": "Because I told my mum I wasn't !scared.!",
+"freeze": true,
+"freeze_except": [
+"me"
+],
+"mood": {
+"me": "scared",
+"mum": "neutral"
+},
+"pose": {
+"me": "scared",
+"mum": "wave"
+}
 }
 ]
 }

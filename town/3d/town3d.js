@@ -132,13 +132,41 @@ const CH = {
   kid: [0xe6a028, 0x5a3c28, 'short'], girl: [0xdc5a5a, 0xc89640, 'long'], man: [0x50508c, 0x1e1e1e, 'short'], woman: [0x3c96a0, 0x8c3228, 'long'],
 };
 function faceTexture(mood = 'smile') {
-  return canvasTex(128, 128, (g) => { g.fillStyle = '#f6cfa6'; g.fillRect(0, 0, 128, 128); g.fillStyle = '#1b1b1b';
-    g.beginPath(); g.ellipse(42, 56, 7, 11, 0, 0, 7); g.ellipse(86, 56, 7, 11, 0, 0, 7); g.fill();
-    g.fillStyle = '#fff'; g.beginPath(); g.arc(44, 52, 3, 0, 7); g.arc(88, 52, 3, 0, 7); g.fill();
-    g.strokeStyle = '#5a2a2a'; g.lineWidth = 5; g.beginPath();
-    if (mood === 'smile') g.arc(64, 74, 16, 0.2, Math.PI - 0.2); else { g.moveTo(52, 92); g.lineTo(76, 92); }
-    g.stroke(); });
+  return canvasTex(128, 128, (g) => { g.fillStyle = '#f6cfa6'; g.fillRect(0, 0, 128, 128);
+    const eye = (x, y, rx, ry) => { g.fillStyle = '#1b1b1b'; g.beginPath(); g.ellipse(x, y, rx, ry, 0, 0, 7); g.fill(); };
+    const shine = (x, y, r) => { g.fillStyle = '#fff'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); };
+    g.strokeStyle = '#3a2418'; g.lineCap = 'round'; g.lineWidth = 5;
+    const line = (pts) => { g.beginPath(); g.moveTo(...pts[0]); for (const q of pts.slice(1)) g.lineTo(...q); g.stroke(); };
+    if (mood === 'scared') {
+      g.fillStyle = '#fff'; g.beginPath(); g.ellipse(42, 56, 14, 17, 0, 0, 7); g.ellipse(86, 56, 14, 17, 0, 0, 7); g.fill();
+      g.lineWidth = 3; g.strokeStyle = '#1b1b1b'; g.stroke(); eye(42, 58, 4, 4); eye(86, 58, 4, 4);
+      g.lineWidth = 5; g.strokeStyle = '#3a2418'; line([[28, 30], [54, 36]]); line([[100, 30], [74, 36]]);
+      g.fillStyle = '#5a2020'; g.beginPath(); g.ellipse(64, 98, 10, 14, 0, 0, 7); g.fill();
+      g.fillStyle = '#8fd0ff'; g.beginPath(); g.moveTo(108, 70); g.quadraticCurveTo(118, 88, 108, 92); g.quadraticCurveTo(98, 88, 108, 70); g.fill();
+    } else if (mood === 'surprised') {
+      eye(42, 56, 9, 12); eye(86, 56, 9, 12); shine(45, 51, 3); shine(89, 51, 3);
+      line([[30, 30], [52, 28]]); line([[76, 28], [98, 30]]);
+      g.fillStyle = '#5a2020'; g.beginPath(); g.ellipse(64, 94, 8, 10, 0, 0, 7); g.fill();
+    } else if (mood === 'sad') {
+      eye(42, 60, 7, 9); eye(86, 60, 7, 9); shine(44, 56, 3); shine(88, 56, 3);
+      line([[30, 40], [52, 34]]); line([[76, 34], [98, 40]]);
+      g.strokeStyle = '#5a2a2a'; g.beginPath(); g.arc(64, 104, 14, Math.PI + 0.4, -0.4); g.stroke();
+      g.fillStyle = '#8fd0ff'; g.beginPath(); g.ellipse(40, 80, 4, 7, 0, 0, 7); g.fill();
+    } else if (mood === 'laugh') {
+      g.lineWidth = 6; g.beginPath(); g.arc(42, 60, 9, Math.PI + 0.3, -0.3); g.stroke(); g.beginPath(); g.arc(86, 60, 9, Math.PI + 0.3, -0.3); g.stroke();
+      g.fillStyle = '#5a2020'; g.beginPath(); g.moveTo(42, 78); g.lineTo(86, 78); g.arc(64, 78, 22, 0, Math.PI); g.fill();
+      g.fillStyle = '#e87a8a'; g.beginPath(); g.ellipse(64, 92, 10, 5, 0, 0, 7); g.fill();
+    } else if (mood === 'creepy') {
+      eye(42, 58, 7, 5); eye(86, 58, 7, 5); line([[30, 48], [54, 52]]); line([[98, 48], [74, 52]]);
+      g.strokeStyle = '#5a2a2a'; g.beginPath(); g.arc(64, 66, 30, 0.35, Math.PI - 0.35); g.stroke();
+    } else if (mood === 'neutral') {
+      eye(42, 56, 7, 10); eye(86, 56, 7, 10); shine(44, 52, 3); shine(88, 52, 3); line([[52, 92], [76, 92]]);
+    } else {
+      eye(42, 56, 7, 11); eye(86, 56, 7, 11); shine(44, 52, 3); shine(88, 52, 3);
+      g.strokeStyle = '#5a2a2a'; g.beginPath(); g.arc(64, 74, 16, 0.2, Math.PI - 0.2); g.stroke();
+    } });
 }
+const FACES = {}; const face = (m) => FACES[m] || (FACES[m] = faceTexture(m));
 const skinM = mat(0xf6cfa6), legM = mat(0x2c3050);
 const people = {};
 function makePerson(key) {
@@ -154,13 +182,13 @@ function makePerson(key) {
   box(0.46, 1.0, 0.5, sM, 0, -0.45, 0, armL); box(0.46, 1.0, 0.5, sM, 0, -0.45, 0, armR);
   box(0.42, 0.2, 0.44, skinM, 0, -1.02, 0, armL); box(0.42, 0.2, 0.44, skinM, 0, -1.02, 0, armR);
   const head = new THREE.Group(); head.position.y = 1.0; hip.add(head);
-  const ft = faceTexture();
-  const hm = [skinM, skinM, skinM, skinM, new THREE.MeshStandardMaterial({ map: ft, roughness: 0.8 }), skinM];
+  const fm = new THREE.MeshStandardMaterial({ map: face('smile'), roughness: 0.8 });
+  const hm = [skinM, skinM, skinM, skinM, fm, skinM];
   const hd = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), hm); hd.position.y = 0.42; hd.castShadow = true; head.add(hd);
   box(0.86, 0.26, 0.86, hM, 0, 0.88, -0.02, head); box(0.86, 0.5, 0.2, hM, 0, 0.6, -0.36, head);
   if (style === 'long') { box(0.9, 1.1, 0.25, hM, 0, 0.25, -0.4, head); box(0.12, 0.9, 0.7, hM, -0.45, 0.35, -0.08, head); box(0.12, 0.9, 0.7, hM, 0.45, 0.35, -0.08, head); }
   if (style === 'bun') { const b = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 10), hM); b.position.set(0, 1.08, -0.2); head.add(b); }
-  return { g, hip, legL, legR, armL, armR, head };
+  return { g, hip, legL, legR, armL, armR, head, fm };
 }
 function person(key) { return people[key] || (people[key] = makePerson(key)); }
 
@@ -188,6 +216,10 @@ function makeProp(kind) {
 }
 function prop(kind) { return props[kind] || (props[kind] = makeProp(kind)); }
 
+const birds = [];
+for (let k = 0; k < 4; k++) { const bd = new THREE.Group(); scene.add(bd); box(0.5, 0.18, 0.2, 0x333340, 0, 0, 0, bd);
+  const wl = new THREE.Group(); wl.position.set(0, 0.05, 0.1); bd.add(wl); box(0.3, 0.04, 0.6, 0x444455, 0, 0, 0.3, wl);
+  const wr = new THREE.Group(); wr.position.set(0, 0.05, -0.1); bd.add(wr); box(0.3, 0.04, 0.6, 0x444455, 0, 0, -0.3, wr); birds.push(bd); }
 // ---------- stages: where characters stand + camera base (pos, look)
 const STAGES = {
   lake:      { at: [0, 0, -5.2], face: 0, cam: [0, 2.6, 7.5], look: [0, 1.5, -6], out: true },
@@ -215,35 +247,83 @@ window.renderAt = (t) => {
   const [ax, ay, az] = st.at; { const cb = new THREE.Vector3(...st.cam).sub(new THREE.Vector3(...st.look)).setY(0).normalize();
     sun.position.set(ax + cb.x * 30 + cb.z * 18, 55, az + cb.z * 30 - cb.x * 18); sun.target.position.set(ax, 0, az); }
   lamp.intensity = st.out ? 0 : (night ? 25 : 60); lamp.position.set(ax + 1, 6, az + 2);
-  // people
+  // people: mood + pose (beat keys or guessed from the caption), freeze when time stops
+  const freeze = !!(B.clock_stopped || B.freeze); const tf = freeze ? bt.start + 0.37 : t;
+  const txt = (B.text || '').toLowerCase();
+  const auto = (k, i) => {
+    if (/scared|afraid|terrified|scream|shaking|couldn't sleep|breathing|run!|ran /.test(txt)) return i === 0 ? ['scared', 'scared'] : ['surprised', 'idle'];
+    if (/laugh/.test(txt)) return ['laugh', 'laugh'];
+    if (/cried|crying|tears|sad|alone/.test(txt)) return ['sad', 'idle'];
+    if (/whisper|creepy|stared|smiled\./.test(txt)) return i === 0 && n > 1 ? ['surprised', 'idle'] : ['creepy', 'idle'];
+    if (/suddenly|gasp|shock|\?|!$|vanish|gone/.test(txt)) return ['surprised', i === 0 ? 'point' : 'idle'];
+    if (/smile|happy|love|hug/.test(txt)) return ['smile', 'wave'];
+    return ['smile', 'idle'];
+  };
+  const pick = (v, k, i) => v == null ? null : (typeof v === 'string' ? v : (v[k] ?? null));
   for (const k in people) people[k].g.visible = false;
   const who = B.who || []; const n = who.length; const sp = n > 2 ? 1.7 : 2.0;
   const right = new THREE.Vector3(Math.cos(st.face), 0, -Math.sin(st.face));
+  const fwd0 = new THREE.Vector3(Math.sin(st.face), 0, Math.cos(st.face));
+  const shift = ((bi * 37) % 3 - 1) * 0.35, depth = ((bi * 53) % 3 - 1) * 0.6;   // vary positions per beat
   who.forEach((k, i) => {
     const P = person(k); P.g.visible = true;
-    const off = (i - (n - 1) / 2) * sp;
-    P.g.position.set(ax + right.x * off, ay, az + right.z * off);
-    const towards = n === 2 ? (i === 0 ? 0.45 : -0.45) : 0;
-    P.g.rotation.y = st.face + towards + Math.sin(t * 0.6 + i) * 0.05;
-    const ph = t * 2 + i * 1.7;
-    P.hip.position.y = 1.0 + Math.sin(ph * 1.1) * 0.02;
+    const still = freeze && !(B.freeze_except || []).includes(k);
+    const at = still ? tf : t;
+    const [am, ap] = auto(k, i);
+    const mood = pick(B.mood, k, i) || am, pose = pick(B.pose, k, i) || ap;
+    P.fm.map = face(mood);
+    let off = (i - (n - 1) / 2) * sp + (n < 3 ? shift : 0);
+    let dz = depth + (n === 2 ? (i ? 0.4 : -0.3) : 0);
+    let rot = st.face + (n === 2 ? (i === 0 ? 0.5 : -0.5) : ((bi + i) % 3 - 1) * 0.25);
+    const ph = at * 2 + i * 1.7;
+    P.hip.position.y = 1.0 + Math.sin(ph * 1.1) * 0.02; P.hip.rotation.set(0, 0, 0);
+    P.armL.rotation.set(Math.sin(ph) * 0.08, 0, -0.05); P.armR.rotation.set(-Math.sin(ph) * 0.08, 0, 0.05);
+    P.legL.rotation.set(0, 0, 0); P.legR.rotation.set(0, 0, 0);
+    P.head.rotation.set(Math.sin(at * 0.7 + i) * 0.05, Math.sin(at * 0.9 + i * 2) * 0.18, 0);
     const talk = (i === (bi % Math.max(1, n)));
-    P.armL.rotation.x = Math.sin(ph) * 0.08; P.armR.rotation.x = talk ? -0.35 + Math.sin(t * 5) * 0.25 : -Math.sin(ph) * 0.08;
-    P.head.rotation.y = Math.sin(t * 0.9 + i * 2) * 0.18; P.head.rotation.x = Math.sin(t * 0.7 + i) * 0.05;
-    P.legL.rotation.x = 0; P.legR.rotation.x = 0;
+    if (pose === 'idle' && talk) P.armR.rotation.x = -0.35 + Math.sin(at * 5) * 0.25;
+    if (pose === 'walk') {
+      const dir = (bi % 2) ? 1 : -1; const wp = still ? 0.5 : (at - bt.start) / Math.max(0.5, bt.end - bt.start); off = off * (n > 2 ? 0.8 : 1) + dir * (-1.5 + 3 * wp);
+      rot = st.face + dir * Math.PI / 2 * 0.8;
+      const sw = Math.sin(at * 7 + i) * 0.6; P.legL.rotation.x = sw; P.legR.rotation.x = -sw; P.armL.rotation.x = -sw * 0.8; P.armR.rotation.x = sw * 0.8;
+      P.hip.position.y = 1.0 + Math.abs(Math.cos(at * 7 + i)) * 0.06;
+    } else if (pose === 'scared') {
+      const back = Math.min(1, (at - bt.start) / 0.5);
+      dz -= 0.8 * back; P.hip.rotation.x = -0.18 * back;
+      P.armL.rotation.set(-2.3, 0, -0.35); P.armR.rotation.set(-2.3, 0, 0.35);
+      off += Math.sin(at * 45) * 0.03; P.head.rotation.x = -0.12; P.head.rotation.z = Math.sin(at * 40) * 0.03;
+    } else if (pose === 'laugh') {
+      P.hip.position.y = 1.0 + Math.abs(Math.sin(at * 9)) * 0.08; P.head.rotation.x = -0.3 + Math.sin(at * 9) * 0.08;
+      P.armL.rotation.set(-0.5, 0, -0.6); P.armR.rotation.set(-0.5, 0, 0.6);
+    } else if (pose === 'point') {
+      P.armR.rotation.set(-1.55, 0, 0.1);
+    } else if (pose === 'wave') {
+      P.armR.rotation.set(0, 0, 2.6 + Math.sin(at * 8) * 0.35);
+    } else if (pose === 'shrug') {
+      P.armL.rotation.set(-0.4, 0, -0.7); P.armR.rotation.set(-0.4, 0, 0.7); P.head.rotation.z = 0.2;
+    } else if (pose === 'hug' && n === 2) {
+      off *= 0.45; P.armL.rotation.set(-1.4, 0, 0.5); P.armR.rotation.set(-1.4, 0, -0.5);
+    }
+    if (pose !== 'walk') rot += still ? 0 : Math.sin(at * 0.6 + i) * 0.05;
+    P.g.position.set(ax + right.x * off + fwd0.x * dz, ay, az + right.z * off + fwd0.z * dz);
+    P.g.rotation.y = rot;
   });
+  // birds (outdoors): freeze mid-air when time stops
+  birds.forEach((bd, k) => { bd.visible = !!st.out && !night;
+    const u = ((tf * 1.6 + k * 4.3) % 22) - 11; bd.position.set(ax + right.x * u + fwd0.x * (-4 - k), 7 + k * 0.9 + Math.sin(tf * 2 + k) * 0.3, az + right.z * u + fwd0.z * (-4 - k));
+    bd.rotation.y = st.face + Math.PI / 2; const fl = Math.sin(tf * 14 + k) * 0.7; bd.children[1].rotation.x = fl; bd.children[2].rotation.x = -fl; });
   // props
   for (const k in props) props[k].visible = false;
   if (B.prop) { const G = prop(B.prop); G.visible = true;
-    const off = n ? (n - 1) / 2 * sp + 1.6 : 0; const fw = new THREE.Vector3(Math.sin(st.face), 0, Math.cos(st.face)); G.position.set(ax + right.x * off + fw.x * (n ? 0.8 : 1.2), ay + (n ? 0.6 : 0.4) + Math.sin(t * 2) * 0.08, az + right.z * off + fw.z * (n ? 0.8 : 1.2));
-    G.rotation.y = st.face + Math.sin(t) * 0.3; G.scale.setScalar(n ? 1.0 : 1.5); }
+    const off = n ? (n - 1) / 2 * sp + 1.6 : 0; const fw = new THREE.Vector3(Math.sin(st.face), 0, Math.cos(st.face)); G.position.set(ax + right.x * off + fw.x * (n ? 0.8 : 1.2), ay + (n ? 0.6 : 0.4) + Math.sin(tf * 2) * 0.08, az + right.z * off + fw.z * (n ? 0.8 : 1.2));
+    G.rotation.y = st.face + Math.sin(tf) * 0.3; G.scale.setScalar(n ? 1.0 : 1.5); }
   // clock: runs unless beat says stopped
-  const stop = !!B.clock_stopped; const ct = stop ? 2.0 : t;
+  const ct = freeze ? 2.0 : t;
   minG.rotation.z = -ct * 0.6; hourG.rotation.z = -ct * 0.05 - 1.2;
   // lake waves
   const pa = lakeGeo.attributes.position.array;
-  for (let i = 0; i < pa.length; i += 3) pa[i + 2] = Math.sin(lakeBase[i] * 0.6 + t * 1.6) * 0.06 + Math.cos(lakeBase[i + 1] * 0.8 + t * 1.2) * 0.05;
-  lakeGeo.attributes.position.needsUpdate = true; boat.position.y = 0.2 + Math.sin(t * 1.3) * 0.08; boat.rotation.z = Math.sin(t) * 0.05;
+  for (let i = 0; i < pa.length; i += 3) pa[i + 2] = Math.sin(lakeBase[i] * 0.6 + tf * 1.6) * 0.06 + Math.cos(lakeBase[i + 1] * 0.8 + tf * 1.2) * 0.05;
+  lakeGeo.attributes.position.needsUpdate = true; boat.position.y = 0.2 + Math.sin(tf * 1.3) * 0.08; boat.rotation.z = Math.sin(tf) * 0.05;
   // camera move
   const cam = new THREE.Vector3(...st.cam), look = new THREE.Vector3(...st.look);
   const fwd = look.clone().sub(cam).normalize(); const side = new THREE.Vector3().crossVectors(fwd, new THREE.Vector3(0, 1, 0)).normalize();
@@ -255,7 +335,7 @@ window.renderAt = (t) => {
   else if (mode === 'left') { c.addScaledVector(side, -1.6 + 3.2 * p); }
   else if (mode === 'right') { c.addScaledVector(side, 1.6 - 3.2 * p); }
   else if (mode === 'up') { lk.y += 8 * p; }
-  if (mode === 'close' && n) { const P = person(who[0]); const hp = new THREE.Vector3(); P.head.getWorldPosition(hp); c = hp.clone().addScaledVector(new THREE.Vector3(Math.sin(st.face), 0, Math.cos(st.face)), 2.6 - 0.6 * p); c.y += 0.3; lk = hp.clone(); lk.y += 0.3; }
+  if (mode === 'close' && n) { const P = person(B.focus || who[0]); const hp = new THREE.Vector3(); P.head.getWorldPosition(hp); c = hp.clone().addScaledVector(new THREE.Vector3(Math.sin(st.face), 0, Math.cos(st.face)), 4.2 - 0.8 * p); c.y += 0.3; lk = hp.clone(); lk.y += 0.3; }
   if (t === 0) { /* cover frame */ }
   camera.position.copy(c); camera.lookAt(lk);
   renderer.render(scene, camera);
