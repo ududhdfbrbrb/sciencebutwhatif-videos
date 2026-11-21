@@ -94,3 +94,6 @@ tr|TURKEY|#1: 3.16 kg of tea per person
 id|INDONESIA|#3: 54,716 km of coastline
 no|NORWAY|#2: 58,133 km of coastline
 ca|CANADA|#1: 202,080 km of coastline
+gr|GREECE|Has about 6,000 islands and islets
+sa|SAUDI ARABIA|Covers most of the Arabian Peninsula
+la|LAOS|Southeast Asia's only landlocked country
