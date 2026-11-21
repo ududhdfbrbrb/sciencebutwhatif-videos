@@ -11,3 +11,4 @@
 2026-11-20 21:45 country ranking: most tea per person (gb/ie/tr) -> live 23:00 (only 1 video: second render (capital de/kz/bf) too slow to finish before 23:02; temp branches not deleted: remote refused)
 2026-11-20 22:09 whatif What if you lived on Titan? -> live 00:00 (only 1 video: daily limit 14/15; temp branch not deleted: remote refused)
 2026-11-21 07:15 whatif What if a teaspoon of neutron star came to Earth? -> live 08:00 (temp branch not deleted: remote refused)
+2026-11-21 09:04 country ranking: longest coastline (id/no/ca) -> live 09:10 (render too slow for 09:00, used parallel render; temp branch not deleted: remote refused)
