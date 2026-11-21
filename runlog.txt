@@ -18,3 +18,4 @@
 2026-11-21 12:18 whatif: What if you stood on Saturn's rings? -> live 13:00 (temp branch not deleted: remote refused)
 2026-11-21 13:34 country capital: de/ma/kz -> live 14:00 (temp branch not deleted: remote refused)
 2026-11-21 14:18 town: weird laws about animals (Switzerland/Venice/Alberta) -> live 15:00 (temp branch not deleted: remote refused)
+2026-11-21 15:08 gametips: Minecraft (copper golem, happy ghast, mace, creaking, water bucket) -> live 16:00 (temp branch not deleted: remote refused)
