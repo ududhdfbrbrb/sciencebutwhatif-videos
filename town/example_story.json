@@ -1,21 +1,131 @@
-{"beats":[
-{"scene":"square","who":["me"],"cam":"in","text":"In this town, the ~clock tower~ stops every time someone tells a *lie.*"},
-{"scene":"square","who":["mayor"],"prop":"clock","text":"It stopped when the mayor said the new road would be *finished by spring.*"},
-{"scene":"kitchen","who":["grandad","nan"],"prop":"cake","text":"It stopped when Grandad told Nan he'd quit eating *cake.*"},
-{"scene":"street","who":["kid","girl","man"],"text":"So in this town, nobody lies. *Ever.*"},
-{"scene":"street","text":"#MONDAY"},
-{"scene":"street","who":["me","ivy"],"text":"A new girl moved in next door. Her name was ~Ivy.~"},
-{"scene":"classroom","text":"#TUESDAY"},
-{"scene":"classroom","who":["ivy","teacher"],"text":"In class, she said she'd lived here *before.* Everyone laughed."},
-{"scene":"square","prop":"clock","text":"But the ~clock~ kept ticking."},
-{"scene":"street","text":"#WEDNESDAY"},
-{"scene":"street","who":["ivy"],"prop":"cat","text":"She knew exactly where Mrs. Green's lost cat was hiding. *Before anyone told her.*"},
-{"scene":"lake","text":"#THURSDAY"},
-{"scene":"lake","who":["me","ivy"],"text":"I asked her how. She said, ^\"I told you. I lived here before.\"^"},
-{"scene":"lake","who":["me","ivy"],"cam":"in","text":"\"When?\" I asked. She looked up at the tower. *\"Before it was built.\"*"},
-{"scene":"square","prop":"clock","cam":"in","text":"The ~clock~ kept ticking."},
-{"scene":"lake","text":"#FRIDAY"},
-{"scene":"lake","who":["me"],"gray":true,"text":"I found her name carved into the oldest bench by the lake. Next to a date: *1874.*"},
-{"scene":"bedroom","who":["me"],"prop":"moon","text":"That night, for the first time in *forty years,* the clock !stopped.!"},
-{"scene":"bedroom","who":["me","mum"],"cam":"in","text":"Because I told my mum I wasn't !scared.!"}
-]}
+{
+"beats": [
+{
+"scene": "square",
+"who": [
+"me"
+],
+"cam": "in",
+"text": "In this town, the ~clock tower~ stops every time someone tells a *lie.*"
+},
+{
+"scene": "square",
+"who": [
+"mayor"
+],
+"text": "It stopped when the mayor said the new road would be *finished by spring.*"
+},
+{
+"scene": "kitchen",
+"who": [
+"grandad",
+"nan"
+],
+"prop": "cake",
+"text": "It stopped when Grandad told Nan he'd quit eating *cake.*"
+},
+{
+"scene": "street",
+"who": [
+"kid",
+"girl",
+"man"
+],
+"text": "So in this town, nobody lies. *Ever.*"
+},
+{
+"scene": "street",
+"text": "#MONDAY"
+},
+{
+"scene": "street",
+"who": [
+"me",
+"ivy"
+],
+"text": "A new girl moved in next door. Her name was ~Ivy.~"
+},
+{
+"scene": "classroom",
+"text": "#TUESDAY"
+},
+{
+"scene": "classroom",
+"who": [
+"ivy",
+"teacher"
+],
+"text": "In class, she said she'd lived here *before.* Everyone laughed."
+},
+{
+"scene": "square",
+"text": "But the ~clock~ kept ticking."
+},
+{
+"scene": "street",
+"text": "#WEDNESDAY"
+},
+{
+"scene": "street",
+"who": [
+"ivy"
+],
+"prop": "cat",
+"text": "She knew exactly where Mrs. Green's lost cat was hiding. *Before anyone told her.*"
+},
+{
+"scene": "lake",
+"text": "#THURSDAY"
+},
+{
+"scene": "lake",
+"who": [
+"me",
+"ivy"
+],
+"text": "I asked her how. She said, ^\"I told you. I lived here before.\"^"
+},
+{
+"scene": "lake",
+"who": [
+"me",
+"ivy"
+],
+"cam": "in",
+"text": "\"When?\" I asked. She looked up at the tower. *\"Before it was built.\"*"
+},
+{
+"scene": "square",
+"cam": "in",
+"text": "The ~clock~ kept ticking."
+},
+{
+"scene": "lake",
+"text": "#FRIDAY"
+},
+{
+"scene": "lake",
+"who": [
+"me"
+],
+"gray": true,
+"text": "I found her name carved into the oldest bench by the lake. Next to a date: *1874.*"
+},
+{
+"scene": "square",
+"night": true,
+"clock_stopped": true,
+"cam": "in",
+"text": "That night, for the first time in *forty years,* the clock !stopped.!"
+},
+{
+"scene": "bedroom",
+"who": [
+"me",
+"mum"
+],
+"cam": "close",
+"text": "Because I told my mum I wasn't !scared.!"
+}
+]
+}

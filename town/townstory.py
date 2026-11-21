@@ -7,7 +7,7 @@ A beat whose text is "#MONDAY" (any word after #) shows a big day card ("ON" + w
 Scenes: lake, square, street, classroom, hallway, bedroom, jetty, kitchen.
 Characters (who): me, ivy, mum, dad, grandad, nan, mayor, teacher, kid, girl, man, woman.
 Props: cat, cake, letter, fish, clock, key, book, phone, ring, bike, moon, umbrella, glow, door.
-Writes video (no audio) and timing json (<out>.json: chunk start times, used for music hits).
+3D version: town3d.py (same story.json, preferred). Writes video (no audio) and timing json (<out>.json: chunk start times, used for music hits).
 """
 import sys, json, math, re, subprocess, random
 import numpy as np

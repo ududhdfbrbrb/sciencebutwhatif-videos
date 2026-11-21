@@ -20,3 +20,4 @@
 2026-11-21 14:18 town: weird laws about animals (Switzerland/Venice/Alberta) -> live 15:00 (temp branch not deleted: remote refused)
 2026-11-21 15:08 gametips: Minecraft (copper golem, happy ghast, mace, creaking, water bucket) -> live 16:00 (temp branch not deleted: remote refused)
 2026-11-21 16:19 whatif: What if all satellites stopped working? -> live 17:00 (temp branch not deleted: remote refused)
+2026-11-21 16:58 town: story clock tower (new 3D story format) -> live 19:00
