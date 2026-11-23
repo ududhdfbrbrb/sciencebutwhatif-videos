@@ -27,3 +27,4 @@
 2026-11-21 21:34 country FAIL media library full (500 MB), facts au/bo/ls not scheduled for 22:00
 2026-11-22 08:18 whatif FAIL media library full (500 MB), ozone layer not scheduled for 09:00
 2026-11-22 09:06 country FAIL media library full (500 MB, ~524.23 of 524.29 MB used), nothing rendered, not scheduled for 10:00
+2026-11-23 08:20 whatif FAIL media library still full (500 MB, no assets freed since 2026-11-22), nothing rendered, not scheduled for 09:00
