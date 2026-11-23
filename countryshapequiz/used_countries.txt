@@ -100,3 +100,6 @@ la|LAOS|Southeast Asia's only landlocked country
 de|GERMANY|Capital: Berlin
 ma|MOROCCO|Capital: Rabat
 kz|KAZAKHSTAN|Capital: Astana
+au|AUSTRALIA|A new beach every day for 29 years: 10,000+ beaches
+mx|MEXICO|Hides the largest pyramid on Earth, by volume
+bo|BOLIVIA|Has a navy, but no coastline at all

@@ -30,3 +30,4 @@
 2026-11-21 ranking longest coastline (CIA World Factbook)
 2026-11-21 shape gr/sa/la
 2026-11-21 capital de/ma/kz
+2026-11-23 crazyfacts au/mx/bo
