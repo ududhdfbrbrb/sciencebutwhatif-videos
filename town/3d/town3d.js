@@ -216,6 +216,14 @@ function makeProp(kind) {
 }
 function prop(kind) { return props[kind] || (props[kind] = makeProp(kind)); }
 
+// ---------- rain clouds ("rain": ["kid"] puts a small raining cloud over those people; "rain_small": shrinks it)
+const clouds = {};
+function makeCloud() { const g = new THREE.Group(); scene.add(g); const cm = mat(0x8a90a0, { roughness: 1 });
+  for (const [x, y, r] of [[-0.55, 0, 0.45], [0, 0.15, 0.6], [0.55, 0, 0.45], [0.25, -0.1, 0.4], [-0.25, -0.1, 0.4]]) { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 10), cm); m.position.set(x, y, 0); g.add(m); }
+  const dm = new THREE.MeshBasicMaterial({ color: 0x9fd4ff }); g.userData.drops = [];
+  for (let k = 0; k < 26; k++) { const d = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.28, 0.035), dm); d.userData.o = [(Math.random() - 0.5) * 1.5, Math.random(), (Math.random() - 0.5) * 0.9]; g.add(d); g.userData.drops.push(d); }
+  return g; }
+function cloud(k) { return clouds[k] || (clouds[k] = makeCloud()); }
 const birds = [];
 for (let k = 0; k < 4; k++) { const bd = new THREE.Group(); scene.add(bd); box(0.5, 0.18, 0.2, 0x333340, 0, 0, 0, bd);
   const wl = new THREE.Group(); wl.position.set(0, 0.05, 0.1); bd.add(wl); box(0.3, 0.04, 0.6, 0x444455, 0, 0, 0.3, wl);
@@ -312,6 +320,12 @@ window.renderAt = (t) => {
   birds.forEach((bd, k) => { bd.visible = !!st.out && !night;
     const u = ((tf * 1.6 + k * 4.3) % 22) - 11; bd.position.set(ax + right.x * u + fwd0.x * (-4 - k), 7 + k * 0.9 + Math.sin(tf * 2 + k) * 0.3, az + right.z * u + fwd0.z * (-4 - k));
     bd.rotation.y = st.face + Math.PI / 2; const fl = Math.sin(tf * 14 + k) * 0.7; bd.children[1].rotation.x = fl; bd.children[2].rotation.x = -fl; });
+  // rain clouds over people
+  for (const k in clouds) clouds[k].visible = false;
+  (B.rain || []).forEach((k) => { if (!people[k] || !people[k].g.visible) return; const C = cloud(k); C.visible = true; const hp = new THREE.Vector3(); people[k].head.getWorldPosition(hp);
+    const sc = (B.rain_small ? Math.max(0.35, 1 - 0.65 * ease(lt / 2.5)) : 1) * 0.85; C.scale.setScalar(sc);
+    C.position.set(hp.x, hp.y + 1.75 + Math.sin(tf * 1.5) * 0.06, hp.z);
+    C.userData.drops.forEach((d) => { const [x, ph, z] = d.userData.o; const f = ((tf * 1.6 + ph) % 1); d.position.set(x, -0.3 - f * 2.4 / sc, z); d.visible = f < 0.92; }); });
   // props
   for (const k in props) props[k].visible = false;
   if (B.prop) { const G = prop(B.prop); G.visible = true;
