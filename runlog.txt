@@ -30,3 +30,4 @@
 2026-11-23 08:20 whatif FAIL media library still full (500 MB, no assets freed since 2026-11-22), nothing rendered, not scheduled for 09:00
 2026-11-23 09:07 country FAIL media library still full (500 MB, 48 assets, none freed since 2026-11-22), nothing rendered, not scheduled for 10:00
 2026-11-23 10:16 town FAIL media library still full (500 MB, 48 assets, none freed since 2026-11-22), nothing rendered, not scheduled for 11:00
+2026-11-23 11:06 gametips FAIL media library still full (500 MB, 48 assets, none freed since 2026-11-22), nothing rendered, not scheduled for 12:00
