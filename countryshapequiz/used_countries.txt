@@ -109,3 +109,6 @@ sn|SENEGAL|Famous for thieboudienne
 ph|PHILIPPINES|National animal: the carabao
 bd|BANGLADESH|National animal: Royal Bengal tiger
 mu|MAURITIUS|National animal: the dodo (now extinct)
+tz|TANZANIA|Home of Mount Kilimanjaro
+hr|CROATIA|Home of the Plitvice Lakes
+lk|SRI LANKA|Home of Sigiriya, the Lion Rock
