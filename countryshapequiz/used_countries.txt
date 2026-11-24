@@ -112,3 +112,6 @@ mu|MAURITIUS|National animal: the dodo (now extinct)
 tz|TANZANIA|Home of Mount Kilimanjaro
 hr|CROATIA|Home of the Plitvice Lakes
 lk|SRI LANKA|Home of Sigiriya, the Lion Rock
+gb|UNITED KINGDOM|#3: 65 medals in total
+cn|CHINA|#2: 91 medals in total
+us|UNITED STATES|#1: 126 medals in total
