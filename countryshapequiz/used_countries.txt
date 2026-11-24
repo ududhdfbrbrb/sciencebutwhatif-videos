@@ -118,3 +118,6 @@ us|UNITED STATES|#1: 126 medals in total
 ua|UKRAINE|The largest country entirely within Europe
 cu|CUBA|The largest island in the Caribbean
 mw|MALAWI|Long and landlocked, beside a giant lake
+at|AUSTRIA|Capital: Vienna
+uy|URUGUAY|Capital: Montevideo
+kg|KYRGYZSTAN|Capital: Bishkek
