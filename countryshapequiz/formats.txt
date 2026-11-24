@@ -35,3 +35,4 @@
 2026-11-23 animals ph/bd/mu
 2026-11-24 landmark tz/hr/lk
 2026-11-24 ranking most Olympic medals Paris 2024 (official final medal table)
+2026-11-24 shape ua/cu/mw
