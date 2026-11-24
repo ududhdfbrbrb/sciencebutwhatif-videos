@@ -208,7 +208,8 @@ function makeProp(kind) {
   else if (kind === 'phone') { box(0.4, 0.8, 0.06, 0x1e1e22, 0, 0.8, 0, g); box(0.34, 0.68, 0.01, 0x78c8ff, 0, 0.8, 0.04, g, { emissive: 0x78c8ff, emissiveIntensity: 0.8 }); }
   else if (kind === 'ring') { const r = new THREE.Mesh(new THREE.TorusGeometry(0.25, 0.06, 12, 24), mat(0xf0c846, { metalness: 0.8, roughness: 0.25 })); r.position.y = 0.8; g.add(r); }
   else if (kind === 'bike') { for (const dx of [-0.7, 0.7]) { const w = new THREE.Mesh(new THREE.TorusGeometry(0.45, 0.05, 8, 24), mat(0x1e1e1e)); w.position.set(dx, 0.5, 0); g.add(w); } box(1.4, 0.08, 0.08, 0x2878dc, 0, 0.95, 0, g); }
-  else if (kind === 'moon') { const m = new THREE.Mesh(new THREE.SphereGeometry(0.6, 20, 16), new THREE.MeshBasicMaterial({ color: 0xf7f1cf })); m.position.y = 1.2; g.add(m); }
+  else if (kind === 'moon') { const m = new THREE.Mesh(new THREE.SphereGeometry(0.6, 20, 16), new THREE.MeshBasicMaterial({ color: 0xf7f1cf })); g.add(m);
+    [1.0, 1.35, 1.8].forEach((r, i) => { const h = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 16), new THREE.MeshBasicMaterial({ color: 0xbfd8ff, transparent: true, opacity: [0.22, 0.12, 0.06][i], depthWrite: false })); g.add(h); }); }
   else if (kind === 'umbrella') { const u = new THREE.Mesh(new THREE.SphereGeometry(0.9, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), mat(0xdc3c3c)); u.position.y = 1.8; g.add(u); cyl(0.03, 0.03, 1.8, 0x333333, 0, 0.9, 0, g); }
   else if (kind === 'door') { box(1.3, 2.4, 0.15, 0x7a5032, 0, 1.2, 0, g); }
   else { const s = new THREE.Mesh(new THREE.SphereGeometry(0.4, 16, 12), new THREE.MeshBasicMaterial({ color: 0xfff0b0 })); s.position.y = 1; g.add(s); const l = new THREE.PointLight(0xffe8a0, 6, 6); l.position.y = 1; g.add(l); }
@@ -330,7 +331,9 @@ window.renderAt = (t) => {
   for (const k in props) props[k].visible = false;
   if (B.prop) { const G = prop(B.prop); G.visible = true;
     const off = n ? (n - 1) / 2 * sp + 1.6 : 0; const fw = new THREE.Vector3(Math.sin(st.face), 0, Math.cos(st.face)); G.position.set(ax + right.x * off + fw.x * (n ? 0.8 : 1.2), ay + (n ? 0.6 : 0.4) + Math.sin(tf * 2) * 0.08, az + right.z * off + fw.z * (n ? 0.8 : 1.2));
-    G.rotation.y = st.face + Math.sin(tf) * 0.3; G.scale.setScalar(n ? 1.0 : 1.5); }
+    G.rotation.y = st.face + Math.sin(tf) * 0.3; G.scale.setScalar(n ? 1.0 : 1.5);
+    if (B.prop === 'moon') { // moon hangs in the sky behind the people, with a soft halo
+      G.position.set(ax + right.x * 1.6 - fw.x * 6, ay + 5.6 + Math.sin(tf * 0.8) * 0.05, az + right.z * 1.6 - fw.z * 6); G.scale.setScalar(1.4); } }
   // clock: runs unless beat says stopped
   const ct = freeze ? 2.0 : t;
   minG.rotation.z = -ct * 0.6; hourG.rotation.z = -ct * 0.05 - 1.2;
