@@ -51,3 +51,4 @@
 2026-11-24 15:10 gametips: Clash Royale -> live 16:00 (temp branch not deleted: remote refused)
 2026-11-24 16:19 whatif: What if all grass vanished? -> live 17:00 (temp branch not deleted: remote refused)
 2026-11-24 17:16 country: shape ua/cu/mw -> live 18:00
+2026-11-24 18:25 town: anything you lose washes up on the jetty the next morning -> live 19:00 (temp branch not deleted: remote refused)
