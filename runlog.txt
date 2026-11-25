@@ -64,3 +64,4 @@
 2026-11-25 14:26 town: the bakery cat picks tomorrow's good news -> live 15:00
 2026-11-25 15:08 gametips: Apex Legends -> live 16:00 (temp branch not deleted: remote refused)
 2026-11-25 16:19 whatif: What if earthworms disappeared? -> live 17:00 (temp branch not deleted: remote refused)
+2026-11-25 17:36 country: animals dz/gt/bz (fennec fox, quetzal, Baird's tapir) -> live 18:00

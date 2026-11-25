@@ -127,3 +127,6 @@ sz|ESWATINI|Ruled by Africa's last absolute monarch
 be|BELGIUM|Famous for waffles
 pe|PERU|Famous for ceviche
 jm|JAMAICA|Famous for jerk chicken
+dz|ALGERIA|National animal: fennec fox
+gt|GUATEMALA|National animal: resplendent quetzal
+bz|BELIZE|National animal: Baird's tapir
