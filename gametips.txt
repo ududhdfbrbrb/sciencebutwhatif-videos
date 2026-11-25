@@ -7,3 +7,4 @@
 2026-11-24 Warzone | Win your Gulag 1v1 to redeploy; Buy back dead teammates at a Buy Station; Buy a Loadout Drop for custom weapons; Refill armor plates before pushing; Stay ahead of the gas circle
 2026-11-25 Valorant | Stop moving before you shoot, running shots miss; Keep crosshair at head height around corners; Hold Shift to walk silently; Tap or burst at long range, spraying climbs up; Save credits after a lost round for a full buy
 2026-11-25 Apex Legends | Ping enemies so your squad sees them instantly; Swap into a full shield from a deathbox instead of healing; Grab a fallen teammate's banner, then use a Respawn Beacon; Slide down hills to move faster and dodge shots; Dive steeply when dropping to land first
+2026-11-25 Rocket League | Turn off Camera Shake in camera settings; Keep Ball Cam on most of the time; Small boost pads give 12 boost, big ones refill to 100; Hit someone at supersonic speed to demolish them; Learn the half-flip to turn around fast
