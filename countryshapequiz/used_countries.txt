@@ -121,3 +121,6 @@ mw|MALAWI|Long and landlocked, beside a giant lake
 at|AUSTRIA|Capital: Vienna
 uy|URUGUAY|Capital: Montevideo
 kg|KYRGYZSTAN|Capital: Bishkek
+is|ICELAND|No army, yet a founding member of NATO
+ve|VENEZUELA|Sits on the biggest oil reserves on Earth
+sz|ESWATINI|Ruled by Africa's last absolute monarch
