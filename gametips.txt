@@ -5,3 +5,4 @@
 2026-11-24 Brawl Stars | Hide in bushes, enemies only see you up close; Super charges when your attacks hit enemies; Stop shooting and avoid damage ~3s to heal; In Showdown, Power Cubes boost health and damage; Tap to auto-aim, drag the attack stick to aim manually
 2026-11-24 Clash Royale | Last 60 seconds give double elixir, save a big push; Building in the middle pulls Hog Rider or Giant; Don't hit the King Tower early, it activates; Never sit at 10 elixir, extra is wasted; Spells do less damage to towers, use them on troops too
 2026-11-24 Warzone | Win your Gulag 1v1 to redeploy; Buy back dead teammates at a Buy Station; Buy a Loadout Drop for custom weapons; Refill armor plates before pushing; Stay ahead of the gas circle
+2026-11-25 Valorant | Stop moving before you shoot, running shots miss; Keep crosshair at head height around corners; Hold Shift to walk silently; Tap or burst at long range, spraying climbs up; Save credits after a lost round for a full buy
