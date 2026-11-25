@@ -130,3 +130,6 @@ jm|JAMAICA|Famous for jerk chicken
 dz|ALGERIA|National animal: fennec fox
 gt|GUATEMALA|National animal: resplendent quetzal
 bz|BELIZE|National animal: Baird's tapir
+jo|JORDAN|Home of Petra
+kh|CAMBODIA|Home of Angkor Wat
+ml|MALI|Home of the Great Mosque of Djenne

@@ -68,3 +68,4 @@
 2026-11-25 18:24 town: lake answers in window frost -> live 19:00 (temp branch not deleted: remote refused)
 2026-11-25 19:08 gametips: Rocket League -> live 20:00 (temp branch not deleted: remote refused)
 2026-11-25 20:18 whatif: What if all snow turned black? -> live 21:00 (temp branch not deleted: remote refused)
+2026-11-25 21:31 country: landmark jo/kh/ml -> live 22:00
