@@ -124,3 +124,6 @@ kg|KYRGYZSTAN|Capital: Bishkek
 is|ICELAND|No army, yet a founding member of NATO
 ve|VENEZUELA|Sits on the biggest oil reserves on Earth
 sz|ESWATINI|Ruled by Africa's last absolute monarch
+be|BELGIUM|Famous for waffles
+pe|PERU|Famous for ceviche
+jm|JAMAICA|Famous for jerk chicken
