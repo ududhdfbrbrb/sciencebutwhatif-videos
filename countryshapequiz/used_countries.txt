@@ -133,3 +133,6 @@ bz|BELIZE|National animal: Baird's tapir
 jo|JORDAN|Home of Petra
 kh|CAMBODIA|Home of Angkor Wat
 ml|MALI|Home of the Great Mosque of Djenne
+de|GERMANY|#3: 118 Nobel Prizes
+gb|UNITED KINGDOM|#2: 145 Nobel Prizes
+us|UNITED STATES|#1: 432 Nobel Prizes
