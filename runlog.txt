@@ -71,3 +71,4 @@
 2026-11-25 21:31 country: landmark jo/kh/ml -> live 22:00
 2026-11-26 09:30 country FAIL iHatePosting connector needs reconnect; ranking Nobel Prizes rendered, not scheduled for 10:00
 2026-11-26 12:18 whatif FAIL iHatePosting connector needs reconnect; 'What if all sand disappeared?' rendered, not scheduled for 13:00
+2026-11-27 10:27 town FAIL iHatePosting connector needs reconnect; 'library book last page' story rendered, not scheduled for 11:00
